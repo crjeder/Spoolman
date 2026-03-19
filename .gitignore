@@ -204,3 +204,6 @@ $RECYCLE.BIN/
 data/
 .pdm-python
 .history
+
+# Claude Code
+.claude/settings.json
