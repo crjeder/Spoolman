@@ -1,0 +1,9 @@
+# Semgrep false-positive suppressions
+#
+# The "Path Traversal with Actix" rule fires on any std::fs call whose path
+# originates from a function parameter of type PathBuf.  The files listed
+# below only use operator-controlled paths (from SPOOLMAN_DATA_FILE env var
+# or derived from it) — never user-supplied HTTP input — so these findings
+# are false positives.
+crates/spoolman-server/src/backup.rs
+crates/spoolman-server/src/store.rs

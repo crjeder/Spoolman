@@ -1,0 +1,36 @@
+[[bin]]
+name = "spoolman-server"
+bin-package = "spoolman-server"
+lib-package = "spoolman-client"
+
+# The site root folder is where cargo-leptos generates all output.
+# NOTE: all content of this folder will be deleted on a rebuild.
+site-root = "target/site"
+
+# The site-pkg-dir is relative to site-root.
+site-pkg-dir = "pkg"
+
+# The development server address.
+site-addr = "127.0.0.1:3000"
+reload-port = 3001
+
+# The browserlist query used for optimizing the CSS.
+browserquery = "defaults"
+
+# Set by cargo-leptos watch when building with tha watch feature.
+watch = false
+
+# The environment Leptos will run in, usually either "DEV" or "PROD"
+env = "DEV"
+
+# The features to use when compiling the bin target
+bin-features = []
+
+# If the --no-default-features flag should be used when compiling the bin target
+bin-default-features = true
+
+# The features to use when compiling the lib target
+lib-features = []
+
+# If the --no-default-features flag should be used when compiling the lib target
+lib-default-features = true

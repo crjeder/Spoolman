@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/spoolman-types",
+    "crates/spoolman-server",
+    "crates/spoolman-client",
+]

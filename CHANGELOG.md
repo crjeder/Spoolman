@@ -9,23 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Full Rust rewrite: Axum backend + Leptos WASM frontend in a Cargo workspace (`crates/spoolman-types`, `crates/spoolman-server`, `crates/spoolman-client`).
+- `spoolman-types` shared crate: `Spool`, `Filament`, `Location`, `DataStore` types used by both server and client, ensuring compile-time API contract consistency.
+- `Location` as a first-class entity with full CRUD — replaces the previous freeform string field on Spool.
+- `GET /api/v1/filament/search?q=` endpoint: proxies SpoolmanDB on demand (no background scheduler or local cache).
+- `GET /api/v1/export` endpoint: downloads the full data store as JSON.
+- Dark mode toggle with CSS variable switching, persisted in localStorage.
+- Spool clone action (`POST /api/v1/spool/<id>/clone`).
 - `SPOOLMAN_DATA_FILE` environment variable to configure the path of the JSON data file (default: `~/.local/share/spoolman/spoolman.json`).
 
 ### Changed
 
-- Docker builder stage now uses uv instead of pdm to install production dependencies, reducing build time and layer size.
-- **BREAKING**: The `Vendor` entity has been removed. Filaments now have a plain `vendor: string` field instead of a foreign-key reference.
-- **BREAKING**: Color fields (`color_hex`, `multi_color_hexes`, `multi_color_direction`) have moved from Filament to Spool. Each physical spool can now have its own color.
-- **BREAKING**: `price` has moved from Filament to Spool. Each physical spool can record its own purchase price.
-- **BREAKING**: `weight` and `spool_weight` have been removed from Filament. These are per-spool properties — set `initial_weight` and `spool_weight` on the Spool instead.
-- **BREAKING**: `article_number` and `external_id` have been removed from Filament. `lot_nr` and `external_id` have been removed from Spool.
-- The `/filament/find-by-color` endpoint has moved to `/spool/find-by-color`.
-- All vendor CRUD endpoints (`GET/POST/PATCH/DELETE /api/v1/vendor`) have been removed.
-- **BREAKING**: All data is now stored in a single JSON file (`spoolman.json`) instead of a relational database. SQLite, PostgreSQL, MySQL, and CockroachDB backends have been removed.
-- **BREAKING**: There is no automatic migration from an existing database. You must export your data manually before upgrading (e.g. via the export endpoints) and re-import it after.
-- The `SPOOLMAN_DB_*` environment variables (`SPOOLMAN_DB_TYPE`, `SPOOLMAN_DB_HOST`, etc.) are no longer recognized and can be removed from your configuration.
-- The `/api/v1/info` response field `db_type` has been replaced with `data_file` (the resolved path to the JSON file).
-- Docker volume mounts previously pointing at `/home/app/.local/share/spoolman` (for `spoolman.db`) still work — the JSON file is written to the same directory as `spoolman.json`.
+- **BREAKING**: Entire stack replaced — Python/FastAPI backend and React/Refine/Ant Design frontend superseded by a Rust Cargo workspace (Axum + Leptos WASM). Docker image no longer requires Python runtime or Node.js build artifacts.
+- **BREAKING**: JSON storage format redesigned for Rust/serde ergonomics. No existing data to migrate (format was unconstrained).
+- **BREAKING**: Spool and Filament IDs are now random `u32` values (previously sequential integers), stable across export/reimport for NFC tag URL durability.
+- **BREAKING**: Colors represented as `Vec<RGBA>` (OpenTag3D/OpenPrintTag compatible) instead of hex strings. Color lives on Spool, not Filament.
+- **BREAKING**: Weight tracked as `initial_weight` + `current_weight` (full scale readings). Three-mode weight entry (used/remaining/measured) removed.
+- **BREAKING**: The `Vendor` entity removed; vendor is a plain string on Filament.
+- **BREAKING**: `article_number`, `external_id`, `lot_nr`, `extra` fields removed from all entities.
+- **BREAKING**: WebSocket live-update endpoint removed.
+- **BREAKING**: Backup download endpoint removed (backup still runs automatically in background).
+- Spool NFC Online Data URL maps to `/api/v1/spool/<id>` (OpenTag3D-compatible).
+- README updated with Rust build instructions and revised environment variable reference.
 
 ### Fixed
 

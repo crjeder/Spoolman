@@ -49,6 +49,7 @@ spoolman/           # Python backend (FastAPI, no ORM)
   main.py           # App entry point, FastAPI app setup
   env.py            # All environment variable parsing
   settings.py       # Runtime settings
+  ws.py             # WebSocket support
 
 client/             # React 19 + TypeScript frontend (Vite + Refine)
   src/

@@ -1,0 +1,22 @@
+use spoolman_types::{requests::{CreateFilament, UpdateFilament}, responses::FilamentResponse};
+use super::{ApiError, delete, get, patch_json, post_json};
+
+pub async fn list_filaments() -> Result<Vec<FilamentResponse>, ApiError> {
+    get("/api/v1/filament?order=asc&sort=manufacturer").await
+}
+
+pub async fn get_filament(id: u32) -> Result<FilamentResponse, ApiError> {
+    get(&format!("/api/v1/filament/{id}")).await
+}
+
+pub async fn create_filament(body: &CreateFilament) -> Result<FilamentResponse, ApiError> {
+    post_json("/api/v1/filament", body).await
+}
+
+pub async fn update_filament(id: u32, body: &UpdateFilament) -> Result<FilamentResponse, ApiError> {
+    patch_json(&format!("/api/v1/filament/{id}"), body).await
+}
+
+pub async fn delete_filament(id: u32) -> Result<(), ApiError> {
+    delete(&format!("/api/v1/filament/{id}")).await
+}
