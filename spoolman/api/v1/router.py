@@ -7,7 +7,7 @@ import logging
 import shutil
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
 from starlette.responses import Response
@@ -16,7 +16,6 @@ from spoolman import env
 from spoolman.exceptions import ItemNotFoundError
 from spoolman.storage.dependencies import get_store
 from spoolman.storage.store import JsonStore
-from spoolman.ws import websocket_manager
 
 from . import export, externaldb, field, filament, models, other, setting, spool
 
@@ -29,10 +28,6 @@ app = FastAPI(
     REST API for Spoolman.
 
     The API is served on the path `/api/v1/`.
-
-    Some endpoints also serve a websocket on the same path. The websocket is used to listen for changes to the data
-    that the endpoint serves. The websocket messages are JSON objects. Additionally, there is a root-level websocket
-    endpoint that listens for changes to any data in the database.
     """,
 )
 
@@ -111,24 +106,6 @@ async def backup(store: Annotated[JsonStore, Depends(get_store)]) -> JSONRespons
             status_code=500,
             content={"message": "Backup failed. See server logs for more information."},
         )
-
-
-@app.websocket(
-    "/",
-    name="Listen to any changes",
-)
-async def notify(
-    websocket: WebSocket,
-) -> None:
-    await websocket.accept()
-    websocket_manager.connect((), websocket)
-    try:
-        while True:
-            await asyncio.sleep(0.5)
-            if await websocket.receive_text():
-                await websocket.send_json({"status": "healthy"})
-    except WebSocketDisconnect:
-        websocket_manager.disconnect((), websocket)
 
 
 # Add routers

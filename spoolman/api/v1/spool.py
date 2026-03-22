@@ -5,19 +5,17 @@ import logging
 from datetime import datetime
 from typing import Annotated, Optional
 
-from fastapi import APIRouter, Depends, Query, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-from spoolman.api.v1.models import EventType, Message, MultiColorDirection, Spool, SpoolEvent
+from spoolman.api.v1.models import Message, MultiColorDirection, Spool
 from spoolman.exceptions import ItemCreateError, SpoolMeasureError
 from spoolman.extra_fields import EntityType, get_extra_fields, validate_extra_field_dict
 from spoolman.storage.dependencies import get_store
 from spoolman.storage.models import SpoolModel
 from spoolman.storage.store import JsonStore
-from spoolman.ws import websocket_manager
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
@@ -111,29 +109,12 @@ class SpoolMeasureParameters(BaseModel):
     weight: float = Field(description="Current gross weight of the spool, in g.", examples=[200])
 
 
-async def _spool_changed(store: JsonStore, spool_id: int, typ: EventType) -> None:
-    try:
-        item = store.get_spool(spool_id)
-        await websocket_manager.send(
-            ("spool", str(spool_id)),
-            SpoolEvent(
-                type=typ,
-                resource="spool",
-                date=datetime.utcnow(),
-                payload=_spool_to_api(store, item),
-            ),
-        )
-    except Exception:
-        logger.exception("Failed to send websocket message")
-
-
 @router.get(
     "",
     name="Find spool",
     response_model_exclude_none=True,
     responses={
         200: {"model": list[Spool]},
-        299: {"model": SpoolEvent, "description": "Websocket message"},
     },
 )
 async def find(
@@ -200,24 +181,11 @@ async def find_by_color(
     )
 
 
-@router.websocket("", name="Listen to spool changes")
-async def notify_any(websocket: WebSocket) -> None:
-    await websocket.accept()
-    websocket_manager.connect(("spool",), websocket)
-    try:
-        while True:
-            await asyncio.sleep(0.5)
-            if await websocket.receive_text():
-                await websocket.send_json({"status": "healthy"})
-    except WebSocketDisconnect:
-        websocket_manager.disconnect(("spool",), websocket)
-
-
 @router.get(
     "/{spool_id}",
     name="Get spool",
     response_model_exclude_none=True,
-    responses={404: {"model": Message}, 299: {"model": SpoolEvent, "description": "Websocket message"}},
+    responses={404: {"model": Message}},
 )
 async def get(
     store: Annotated[JsonStore, Depends(get_store)],
@@ -225,19 +193,6 @@ async def get(
 ) -> Spool:
     item = await asyncio.to_thread(store.get_spool, spool_id)
     return _spool_to_api(store, item)
-
-
-@router.websocket("/{spool_id}", name="Listen to spool changes")
-async def notify(websocket: WebSocket, spool_id: int) -> None:
-    await websocket.accept()
-    websocket_manager.connect(("spool", str(spool_id)), websocket)
-    try:
-        while True:
-            await asyncio.sleep(0.5)
-            if await websocket.receive_text():
-                await websocket.send_json({"status": "healthy"})
-    except WebSocketDisconnect:
-        websocket_manager.disconnect(("spool", str(spool_id)), websocket)
 
 
 @router.post(
@@ -280,7 +235,6 @@ async def create(  # noqa: ANN201
             archived=body.archived,
             extra=body.extra,
         )
-        await _spool_changed(store, item.id, EventType.ADDED)
         return _spool_to_api(store, item)
     except ItemCreateError:
         logger.exception("Failed to create spool.")
@@ -317,7 +271,6 @@ async def update(  # noqa: ANN201
         logger.exception("Failed to update spool.")
         return JSONResponse(status_code=400, content={"message": "Failed to update spool, see server logs for more information."})
 
-    await _spool_changed(store, item.id, EventType.UPDATED)
     return _spool_to_api(store, item)
 
 
@@ -330,19 +283,7 @@ async def delete(
     store: Annotated[JsonStore, Depends(get_store)],
     spool_id: int,
 ) -> Message:
-    item = await asyncio.to_thread(store.delete_spool, spool_id)
-    try:
-        await websocket_manager.send(
-            ("spool", str(spool_id)),
-            SpoolEvent(
-                type=EventType.DELETED,
-                resource="spool",
-                date=datetime.utcnow(),
-                payload=_spool_to_api(store, item),
-            ),
-        )
-    except Exception:
-        logger.exception("Failed to send websocket message")
+    await asyncio.to_thread(store.delete_spool, spool_id)
     return Message(message="Success!")
 
 
@@ -363,12 +304,10 @@ async def use(  # noqa: ANN201
 
     if body.use_weight is not None:
         item = await asyncio.to_thread(store.use_weight, spool_id, body.use_weight)
-        await _spool_changed(store, item.id, EventType.UPDATED)
         return _spool_to_api(store, item)
 
     if body.use_length is not None:
         item = await asyncio.to_thread(store.use_length, spool_id, body.use_length)
-        await _spool_changed(store, item.id, EventType.UPDATED)
         return _spool_to_api(store, item)
 
     return JSONResponse(status_code=400, content={"message": "Either use_weight or use_length must be specified."})
@@ -388,7 +327,6 @@ async def measure(  # noqa: ANN201
 ):
     try:
         item = await asyncio.to_thread(store.measure_spool, spool_id, body.weight)
-        await _spool_changed(store, item.id, EventType.UPDATED)
         return _spool_to_api(store, item)
     except SpoolMeasureError as e:
         logger.exception("Failed to update spool measurement.")
