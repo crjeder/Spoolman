@@ -14,6 +14,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] make the Spool view default
 - [ ] color search
 - [ ] add type field to filament (eg. "PLA")
+- [ ] add a "light" theme which matches the logo
 
 ### Simplification
 - [ ] Drop export endpoints (`spoolman/api/v1/export.py`) — replace with a simple JSON data-file download

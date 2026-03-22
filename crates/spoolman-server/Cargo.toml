@@ -1,0 +1,20 @@
+[package]
+name = "spoolman-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+spoolman-types = { path = "../spoolman-types" }
+axum = { version = "0.7", features = ["macros"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0.4", features = ["serde"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "compression-gzip", "fs", "trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+rand = "0.8"
+reqwest = { version = "0.11", features = ["json"] }
+thiserror = "1"
+leptos = "0.8.17"
