@@ -2,21 +2,19 @@
 
 import asyncio
 import logging
-from datetime import datetime
 from typing import Annotated, Optional
 
-from fastapi import APIRouter, Depends, Query, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
-from spoolman.api.v1.models import EventType, Filament, FilamentEvent, Message
+from spoolman.api.v1.models import Filament, Message
 from spoolman.exceptions import ItemDeleteError
 from spoolman.extra_fields import EntityType, get_extra_fields, validate_extra_field_dict
 from spoolman.storage.dependencies import get_store
 from spoolman.storage.models import FilamentModel
 from spoolman.storage.store import JsonStore
-from spoolman.ws import websocket_manager
 
 logger = logging.getLogger(__name__)
 
@@ -57,29 +55,12 @@ class FilamentUpdateParameters(FilamentParameters):
         return v
 
 
-async def _filament_changed(store: JsonStore, filament_id: int, typ: EventType) -> None:
-    try:
-        item = store.get_filament(filament_id)
-        await websocket_manager.send(
-            ("filament", str(filament_id)),
-            FilamentEvent(
-                type=typ,
-                resource="filament",
-                date=datetime.utcnow(),
-                payload=Filament.from_db(item),
-            ),
-        )
-    except Exception:
-        logger.exception("Failed to send websocket message")
-
-
 @router.get(
     "",
     name="Find filaments",
     response_model_exclude_none=True,
     responses={
         200: {"model": list[Filament]},
-        299: {"model": FilamentEvent, "description": "Websocket message"},
     },
 )
 async def find(
@@ -117,24 +98,11 @@ async def find(
     )
 
 
-@router.websocket("", name="Listen to filament changes")
-async def notify_any(websocket: WebSocket) -> None:
-    await websocket.accept()
-    websocket_manager.connect(("filament",), websocket)
-    try:
-        while True:
-            await asyncio.sleep(0.5)
-            if await websocket.receive_text():
-                await websocket.send_json({"status": "healthy"})
-    except WebSocketDisconnect:
-        websocket_manager.disconnect(("filament",), websocket)
-
-
 @router.get(
     "/{filament_id}",
     name="Get filament",
     response_model_exclude_none=True,
-    responses={404: {"model": Message}, 299: {"model": FilamentEvent, "description": "Websocket message"}},
+    responses={404: {"model": Message}},
 )
 async def get(
     store: Annotated[JsonStore, Depends(get_store)],
@@ -142,19 +110,6 @@ async def get(
 ) -> Filament:
     item = await asyncio.to_thread(store.get_filament, filament_id)
     return _filament_to_api(item)
-
-
-@router.websocket("/{filament_id}", name="Listen to filament changes")
-async def notify(websocket: WebSocket, filament_id: int) -> None:
-    await websocket.accept()
-    websocket_manager.connect(("filament", str(filament_id)), websocket)
-    try:
-        while True:
-            await asyncio.sleep(0.5)
-            if await websocket.receive_text():
-                await websocket.send_json({"status": "healthy"})
-    except WebSocketDisconnect:
-        websocket_manager.disconnect(("filament", str(filament_id)), websocket)
 
 
 @router.post(
@@ -187,7 +142,6 @@ async def create(  # noqa: ANN201
         comment=body.comment,
         extra=body.extra,
     )
-    await _filament_changed(store, item.id, EventType.ADDED)
     return _filament_to_api(item)
 
 
@@ -213,7 +167,6 @@ async def update(  # noqa: ANN201
             return JSONResponse(status_code=400, content=Message(message=str(e)).model_dump())
 
     item = await asyncio.to_thread(store.update_filament, filament_id, patch_data)
-    await _filament_changed(store, item.id, EventType.UPDATED)
     return _filament_to_api(item)
 
 
@@ -228,23 +181,11 @@ async def delete(  # noqa: ANN201
     filament_id: int,
 ):
     try:
-        item = await asyncio.to_thread(store.delete_filament, filament_id)
+        await asyncio.to_thread(store.delete_filament, filament_id)
     except ItemDeleteError:
         logger.exception("Failed to delete filament.")
         return JSONResponse(
             status_code=403,
             content={"message": "Failed to delete filament, see server logs for more information."},
         )
-    try:
-        await websocket_manager.send(
-            ("filament", str(filament_id)),
-            FilamentEvent(
-                type=EventType.DELETED,
-                resource="filament",
-                date=datetime.utcnow(),
-                payload=Filament.from_db(item),
-            ),
-        )
-    except Exception:
-        logger.exception("Failed to send websocket message")
     return Message(message="Success!")

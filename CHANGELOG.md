@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Python dependencies: `SQLAlchemy`, `alembic`, `aiosqlite`, `asyncpg`, `aiomysql`, `psycopg2-binary`, `sqlalchemy-cockroachdb`.
 - Alembic migration directory (`migrations/`) and `alembic.ini`.
 - Prometheus metrics endpoint (`GET /metrics`) and the `SPOOLMAN_METRICS_ENABLED` environment variable. The `prometheus-client` dependency has been removed.
+- **BREAKING**: WebSocket support has been removed. The endpoints `GET /api/v1/` (root), `/api/v1/spool`, `/api/v1/spool/{id}`, `/api/v1/filament`, `/api/v1/filament/{id}`, `/api/v1/setting`, and `/api/v1/setting/{key}` no longer accept WebSocket connections. Use polling on the corresponding REST endpoints instead.
 
 ### Fixed
 
