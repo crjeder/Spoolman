@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.25.0] - 2023-03-22
 
 ### Added
 
@@ -56,6 +56,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Filtering spools by empty `filament.name`, `filament.material`, or `filament.vendor` now correctly returns spools whose filament has no value set for that field.
 
-### Security
-
-[Unreleased]: https://github.com/Donkie/Spoolman/compare/v0.22.1...HEAD
