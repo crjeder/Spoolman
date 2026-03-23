@@ -26,8 +26,8 @@ RUN apt-get update \
 RUN groupmod -g 1000 users \
  && useradd -u 1000 -U app \
  && usermod -G users app \
- && mkdir -p /home/app/.local/share/spoolman \
- && chown -R app:app /home/app/.local/share/spoolman
+ && mkdir -p /data \
+ && chown -R app:app /data
 
 # Copy the compiled server binary.
 COPY --from=builder --chown=app:app /build/target/release/spoolman-server /spoolman
@@ -40,7 +40,9 @@ LABEL org.opencontainers.image.description="Keep track of your inventory of 3D-p
 LABEL org.opencontainers.image.licenses=MIT
 
 ENV SPOOLMAN_HOST=0.0.0.0 \
-    SPOOLMAN_PORT=8000
+    SPOOLMAN_PORT=8000 \
+    SPOOLMAN_DATA_FILE=/data/spoolman.json \
+    LEPTOS_SITE_ROOT=/site
 
 EXPOSE 8000
 VOLUME ["/data"]

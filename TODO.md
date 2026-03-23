@@ -9,8 +9,10 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
   - [ ] Install `cargo-leptos` on Windows (blocked: OpenSSL dev headers missing — build in WSL/Linux/Docker instead)
   - [ ] `cargo leptos build --release` first successful build
   - [ ] Verify single binary serves API + WASM frontend (task 12.2)
-  - [ ] Verify `SPOOLMAN_DATA_FILE` volume mount in container (task 12.4)
-  - [ ] Implement `backup::rotate()` once semgrep path-traversal rule is scoped correctly (task 5.5)
+  - [ ] Update `docker-compose.yml` for new binary entrypoint (task 12.3)
+  - [ ] Verify `SPOOLMAN_DATA_FILE` env var mounts correctly in container (task 12.4)
+- [ ] Legacy export converter (`openspec/changes/legacy-export-converter/`) — script to convert old Spoolman JSON exports to new format
+  - [ ] Create `scripts/convert_export.py` CLI (tasks 1–6)
 
 ### Enhancements
 - [ ] NFC tag write support — use spool URL `/api/v1/spool/<id>` as OpenTag3D Online Data URL
