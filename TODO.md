@@ -11,6 +11,3 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] Color search on spool list (filter by RGBA proximity)
 - [ ] Add `filament_type` field to Filament (e.g. "PLA", "PETG", "ABS")
 - [ ] Light theme matching the logo
-
-### Testing
-- [ ] Update integration tests (`tests_integration/`) for the Rust stack (currently written for the Python backend)
