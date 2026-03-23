@@ -15,17 +15,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
   - [ ] Create `scripts/convert_export.py` CLI (tasks 1–6)
 
 ### Enhancements
-- [ ] NFC tag write support — use spool URL `/api/v1/spool/<id>` as OpenTag3D Online Data URL
-- [ ] Color picker UI for `Vec<Rgba>` on spool create/edit (currently accepts color name only)
-- [ ] SpoolmanDB search modal in filament create form (infrastructure in place at `GET /api/v1/filament/search`)
-- [ ] Make spool list the default landing page (currently home/dashboard)
-- [ ] Color search / filter by swatch
+- [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
+- [ ] Make the Spool list the default landing page
+- [ ] Color search on spool list (filter by RGBA proximity)
 - [ ] Light theme matching the logo
-- [ ] `.env` file support at startup
-
-### Cleanup (after Rust rewrite merges)
-- [ ] Remove `spoolman/` (Python backend)
-- [ ] Remove `client/` (React/TypeScript frontend)
-- [ ] Remove `pyproject.toml`, `pdm.lock`, `uv.lock`
-- [ ] Remove `entrypoint.sh`
-- [ ] Archive `openspec/changes/migrate-to-rust/` via `/opsx:archive`

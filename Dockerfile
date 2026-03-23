@@ -3,7 +3,7 @@
 # Replaces the previous Python/Node multi-stage build.
 
 # ── Stage 1: build ────────────────────────────────────────────────────────────
-FROM rust:1.82-bookworm AS builder
+FROM rust:1-bookworm AS builder
 
 # Install cargo-leptos build tool and the WASM compilation target.
 RUN rustup target add wasm32-unknown-unknown \
