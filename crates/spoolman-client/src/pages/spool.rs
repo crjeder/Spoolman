@@ -34,6 +34,7 @@ pub fn SpoolList() -> impl IntoView {
                 f.is_empty()
                     || s.filament.display_name().to_lowercase().contains(&f)
                     || s.spool.color_name.as_deref().unwrap_or("").to_lowercase().contains(&f)
+                    || s.filament.material.as_ref().map(|m| m.abbreviation()).unwrap_or("").to_lowercase().contains(&f)
             })
             .collect::<Vec<_>>()
     };
@@ -124,25 +125,28 @@ pub fn SpoolShow() -> impl IntoView {
     let navigate = use_navigate();
     let navigate_clone = navigate.clone();
 
-    let on_delete = move |_| {
+    // store_value gives Copy semantics so these handlers can be captured
+    // by the reactive `move ||` closure inside view! without making it FnOnce.
+    let nav1 = navigate.clone();
+    let on_delete = store_value(move |_: web_sys::MouseEvent| {
         let id = id();
-        let navigate = navigate.clone();
+        let nav = nav1.clone();
         spawn_local(async move {
             if api::delete_spool(id).await.is_ok() {
-                navigate("/spools", Default::default());
+                nav("/spools", Default::default());
             }
         });
-    };
+    });
 
-    let on_clone = move |_| {
+    let on_clone = store_value(move |_: web_sys::MouseEvent| {
         let id = id();
-        let navigate = navigate_clone.clone();
+        let nav = navigate_clone.clone();
         spawn_local(async move {
             if let Ok(new) = api::clone_spool(id).await {
-                navigate(&format!("/spools/{}", new.spool.id), Default::default());
+                nav(&format!("/spools/{}", new.spool.id), Default::default());
             }
         });
-    };
+    });
 
     view! {
         <div class="page spool-show">
@@ -153,8 +157,8 @@ pub fn SpoolShow() -> impl IntoView {
                 <h1>"Spool #"{move || id()}</h1>
                 <div class="page-actions">
                     <a href=move || format!("/spools/{}/edit", id()) class="btn ">"Edit"</a>
-                    <button on:click=on_clone class="btn ">"Clone"</button>
-                    <button on:click=on_delete class="btn btn-danger ">"Delete"</button>
+                    <button on:click=move |e| on_clone.with_value(|f| f(e)) class="btn ">"Clone"</button>
+                    <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-danger ">"Delete"</button>
                 </div>
             </div>
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
@@ -195,7 +199,7 @@ pub fn SpoolShow() -> impl IntoView {
 #[component]
 pub fn SpoolCreate() -> impl IntoView {
     let navigate = use_navigate();
-    let filaments = create_resource(|| (), |_| async { api::list_filaments().await });
+    let filaments = create_resource(|| (), |_| async { api::list_filaments(None).await });
     let locations = create_resource(|| (), |_| async { api::list_locations().await });
 
     let filament_id = create_rw_signal(0u32);
