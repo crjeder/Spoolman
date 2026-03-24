@@ -3,6 +3,7 @@ pub mod app;
 pub mod components;
 pub mod pages;
 pub mod state;
+pub mod utils;
 
 use leptos::*;
 use wasm_bindgen::prelude::*;

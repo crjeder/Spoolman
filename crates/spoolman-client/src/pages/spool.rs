@@ -6,6 +6,7 @@ use crate::{
     api,
     components::{pagination::Pagination, table::ColHeader},
     state::use_table_state,
+    utils::color::{hex_to_rgba, rgb_distance},
 };
 
 // ── List ───────────────────────────────────────────────────────────────────────
@@ -14,6 +15,8 @@ use crate::{
 pub fn SpoolList() -> impl IntoView {
     let ts = use_table_state("spools");
     let show_archived = create_rw_signal(false);
+    let color_pick: RwSignal<Option<String>> = create_rw_signal(None);
+    let threshold: RwSignal<u8> = create_rw_signal(60u8);
     let visible_cols = create_rw_signal(vec![
         "filament", "color", "remaining_pct", "remaining_weight", "location", "registered",
     ]);
@@ -25,16 +28,23 @@ pub fn SpoolList() -> impl IntoView {
 
     let filtered = move || {
         let f = ts.filter.get().to_lowercase();
+        let pick = color_pick.get();
+        let thresh = threshold.get() as f32;
         spools
             .get()
             .and_then(|r| r.ok())
             .unwrap_or_default()
             .into_iter()
             .filter(|s| {
-                f.is_empty()
+                let text_ok = f.is_empty()
                     || s.filament.display_name().to_lowercase().contains(&f)
                     || s.spool.color_name.as_deref().unwrap_or("").to_lowercase().contains(&f)
-                    || s.filament.material.as_ref().map(|m| m.abbreviation()).unwrap_or("").to_lowercase().contains(&f)
+                    || s.filament.material.as_ref().map(|m| m.abbreviation()).unwrap_or("").to_lowercase().contains(&f);
+                let color_ok = match pick.as_deref().and_then(hex_to_rgba) {
+                    None => true,
+                    Some(target) => s.spool.colors.iter().any(|c| rgb_distance(c, &target) <= thresh),
+                };
+                text_ok && color_ok
             })
             .collect::<Vec<_>>()
     };
@@ -61,6 +71,24 @@ pub fn SpoolList() -> impl IntoView {
                         />
                         " Show archived"
                     </label>
+                    <span class="color-filter">
+                        <input type="color"
+                            title="Filter by color"
+                            on:input=move |ev| color_pick.set(Some(event_target_value(&ev)))
+                        />
+                        {move || color_pick.get().map(|_| view! {
+                            <button type="button" class="btn"
+                                on:click=move |_| color_pick.set(None)
+                            >"×"</button>
+                            <input type="range" min="0" max="255" step="1"
+                                title="Color match threshold"
+                                prop:value=threshold
+                                on:input=move |ev| threshold.set(
+                                    event_target_value(&ev).parse().unwrap_or(60)
+                                )
+                            />
+                        })}
+                    </span>
                     <a href="/spools/new" class="btn btn-primary ">"+ New Spool"</a>
                 </div>
             </div>
