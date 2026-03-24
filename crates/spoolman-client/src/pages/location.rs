@@ -63,7 +63,7 @@ pub fn LocationList() -> impl IntoView {
                 <input type="text" placeholder="New location name"
                     prop:value=move || new_name.get()
                     on:input=move |ev| new_name.set(event_target_value(&ev)) />
-                <button type="submit" class="btn btn-primary">"Add"</button>
+                <button type="submit" class="btn btn-primary ">"Add"</button>
             </form>
 
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
@@ -81,7 +81,8 @@ pub fn LocationList() -> impl IntoView {
                             Ok(ls) => ls.into_iter().map(|loc| {
                                 let id = loc.location.id;
                                 let name = loc.location.name.clone();
-                                let name2 = name.clone(); // for second reactive closure
+                                // Pre-clone so each `move ||` reactive closure gets its own copy.
+                                let name_for_actions = name.clone();
                                 let count = loc.spool_count;
                                 let is_editing = move || editing.get().map(|(eid, _)| eid) == Some(id);
                                 view! {
@@ -108,16 +109,16 @@ pub fn LocationList() -> impl IntoView {
                                         <td class="actions">
                                             {move || if is_editing() {
                                                 view! {
-                                                    <button class="btn" on:click=on_save_edit>"Save"</button>
+                                                    <button class="btn " on:click=on_save_edit>"Save"</button>
                                                     " "
-                                                    <button class="btn" on:click=move |_| editing.set(None)>"Cancel"</button>
+                                                    <button class="btn " on:click=move |_| editing.set(None)>"Cancel"</button>
                                                 }.into_view()
                                             } else {
-                                                let n = name2.clone();
+                                                let n = name_for_actions.clone();
                                                 view! {
-                                                    <button class="btn" on:click=move |_| editing.set(Some((id, n.clone())))>"Edit"</button>
+                                                    <button class="btn " on:click=move |_| editing.set(Some((id, n.clone())))>"Edit"</button>
                                                     " "
-                                                    <button class="btn btn-danger"
+                                                    <button class="btn btn-danger "
                                                         disabled=move || count > 0
                                                         on:click=move |_| on_delete(id)>"Delete"</button>
                                                 }.into_view()

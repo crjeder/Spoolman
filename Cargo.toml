@@ -16,6 +16,9 @@ lib-package = "spoolman-client"
 site-root = "target/site"
 site-pkg-dir = "pkg"
 
+# Static assets directory — cargo-leptos copies this into site-root.
+assets-dir = "assets"
+
 # Dev server address (used by `cargo leptos watch`).
 site-addr = "127.0.0.1:3000"
 reload-port = 3001
@@ -24,6 +27,7 @@ reload-port = 3001
 browserquery = "defaults"
 
 env = "DEV"
+
 
 bin-features = []
 bin-default-features = true

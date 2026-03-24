@@ -57,6 +57,7 @@ pub fn build_router(store: JsonStore, cfg: &Config) -> Router {
         let index = site_dir.join("index.html");
         app = app.fallback_service(
             tower_http::services::ServeDir::new(site_dir)
+                .append_index_html_on_directories(true)
                 .fallback(tower_http::services::ServeFile::new(index)),
         );
     }

@@ -62,6 +62,35 @@ cargo leptos build --release
 
 The entire application ships as a **single self-contained binary** with no Python runtime, no Node.js, and no external database.
 
+## Migrating from Spoolman
+
+If you have data in the original [Donkie/Spoolman](https://github.com/Donkie/Spoolman), use the included converter script to produce a `spoolman.json` file that this service can load.
+
+**Step 1 — export from the old Spoolman:**
+
+```
+GET /api/v1/export/spools?fmt=json    → save as spools_export.json
+GET /api/v1/export/filaments?fmt=json → save as filaments_export.json  (optional)
+```
+
+**Step 2 — convert:**
+
+```bash
+python scripts/convert_export.py spools_export.json \
+    --filaments filaments_export.json \
+    --output spoolman.json
+```
+
+**Step 3 — start this service** pointing `SPOOLMAN_DATA_FILE` at the output file:
+
+```bash
+docker run -p 8000:8000 -v /path/to/data:/data \
+  -e SPOOLMAN_DATA_FILE=/data/spoolman.json \
+  spoolman-light
+```
+
+> `--filaments` is optional but recommended — it includes filaments that have no associated spools.
+
 ## Configuration
 
 All variables can also be set in a `.env` file in the working directory — the server loads it silently on startup (a missing file is not an error).

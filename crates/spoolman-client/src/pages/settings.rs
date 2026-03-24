@@ -28,7 +28,7 @@ pub fn SettingsPage() -> impl IntoView {
         <div class="page settings-page">
             <h1>"Settings"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
-            {move || saved.get().then(|| view! { <p class="success">"Saved."</p> })}
+            {move || saved.get().then(|| view! { <p class="success ">"Saved."</p> })}
             <form on:submit=on_submit>
                 <label>
                     "Currency symbol"
@@ -40,7 +40,7 @@ pub fn SettingsPage() -> impl IntoView {
                         }
                     />
                 </label>
-                <button type="submit" class="btn btn-primary">"Save"</button>
+                <button type="submit" class="btn btn-primary ">"Save"</button>
             </form>
         </div>
     }
