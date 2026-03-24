@@ -42,7 +42,7 @@ fn Sidebar() -> impl IntoView {
     view! {
         <nav class="sidebar">
             <div class="sidebar-header">
-                <span class="logo">"Spoolman"</span>
+                <span class="logo ">"Spoolman"</span>
             </div>
             <ul class="nav-links">
                 <li><A href="/">"Home"</A></li>

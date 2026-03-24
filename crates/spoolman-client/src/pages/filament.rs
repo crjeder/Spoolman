@@ -33,7 +33,7 @@ pub fn FilamentList() -> impl IntoView {
                 <div class="page-actions">
                     <input type="text" placeholder="Filter…"
                         on:input=move |ev| ts.filter.set(event_target_value(&ev)) />
-                    <a href="/filaments/new" class="btn btn-primary">"+ New Filament"</a>
+                    <a href="/filaments/new" class="btn btn-primary ">"+ New Filament"</a>
                 </div>
             </div>
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
@@ -94,7 +94,7 @@ pub fn FilamentShow() -> impl IntoView {
                     Ok(f) => view! {
                         <div class="page-header">
                             <h1>{f.display_name()}</h1>
-                            <a href=format!("/filaments/{}/edit", f.id) class="btn">"Edit"</a>
+                            <a href=format!("/filaments/{}/edit", f.id) class="btn ">"Edit"</a>
                         </div>
                         <dl class="detail-grid">
                             <dt>"Manufacturer"</dt><dd>{f.manufacturer.clone().unwrap_or_default()}</dd>
@@ -170,8 +170,8 @@ pub fn FilamentCreate() -> impl IntoView {
                 <label>"Print temp (°C)"<input type="number" on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>
                 <label>"Bed temp (°C)"<input type="number" on:input=move |ev| bed_temp.set(event_target_value(&ev)) /></label>
                 <label>"Comment"<textarea on:input=move |ev| comment.set(event_target_value(&ev))></textarea></label>
-                <button type="submit" class="btn btn-primary">"Create"</button>
-                <a href="/filaments" class="btn">"Cancel"</a>
+                <button type="submit" class="btn btn-primary ">"Create"</button>
+                <a href="/filaments" class="btn ">"Cancel"</a>
             </form>
         </div>
     }
@@ -249,8 +249,8 @@ pub fn FilamentEdit() -> impl IntoView {
                 <label>"Print temp (°C)"<input type="number" prop:value=move || print_temp.get() on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>
                 <label>"Bed temp (°C)"<input type="number" prop:value=move || bed_temp.get() on:input=move |ev| bed_temp.set(event_target_value(&ev)) /></label>
                 <label>"Comment"<textarea prop:value=move || comment.get() on:input=move |ev| comment.set(event_target_value(&ev))></textarea></label>
-                <button type="submit" class="btn btn-primary">"Save"</button>
-                <a href=move || format!("/filaments/{}", id()) class="btn">"Cancel"</a>
+                <button type="submit" class="btn btn-primary ">"Save"</button>
+                <a href=move || format!("/filaments/{}", id()) class="btn ">"Cancel"</a>
             </form>
         </div>
     }

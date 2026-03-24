@@ -111,6 +111,8 @@ tests_integration/  # Docker-based integration tests (pytest)
 
 ## Workflow
 
+Use git worktrees for feature work to keep changes isolated from the current workspace. Before starting any non-trivial implementation, create a worktree on a new branch rather than working directly on the checked-out branch.
+
 After every change, update [CHANGELOG.md](CHANGELOG.md):
 - Put entries under a new version 
 - Follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format — write for humans, not diffs

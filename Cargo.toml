@@ -5,3 +5,36 @@ members = [
     "crates/spoolman-server",
     "crates/spoolman-client",
 ]
+
+# cargo-leptos 0.3.x reads project config from here (Leptos.toml is ignored).
+[[workspace.metadata.leptos]]
+name = "spoolman-server"
+bin-package = "spoolman-server"
+lib-package = "spoolman-client"
+
+# The site root folder is where cargo-leptos generates all output.
+# NOTE: all content of this folder will be deleted on a rebuild.
+site-root = "target/site"
+
+# The site-pkg-dir is relative to site-root.
+site-pkg-dir = "pkg"
+
+# Static assets directory — cargo-leptos copies this into site-root.
+# index.html lives here so it ends up at target/site/index.html.
+assets-dir = "assets"
+
+# The development server address.
+site-addr = "127.0.0.1:3000"
+reload-port = 3001
+
+# The browserlist query used for optimizing the CSS.
+browserquery = "defaults"
+
+# The environment Leptos will run in, usually either "DEV" or "PROD".
+env = "DEV"
+
+# Features to use when compiling the bin/lib targets.
+bin-features = []
+bin-default-features = true
+lib-features = []
+lib-default-features = true

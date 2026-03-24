@@ -60,7 +60,7 @@ pub fn SpoolList() -> impl IntoView {
                         />
                         " Show archived"
                     </label>
-                    <a href="/spools/new" class="btn btn-primary">"+ New Spool"</a>
+                    <a href="/spools/new" class="btn btn-primary ">"+ New Spool"</a>
                 </div>
             </div>
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
@@ -101,7 +101,7 @@ pub fn SpoolList() -> impl IntoView {
                                     <td>{sr.spool.location_id.map(|l| l.to_string()).unwrap_or_default()}</td>
                                     <td>{sr.spool.registered.format("%Y-%m-%d").to_string()}</td>
                                     <td class="actions">
-                                        <a href=format!("/spools/{id}/edit")">"Edit"</a>
+                                        <a href=format!("/spools/{id}/edit")>"Edit"</a>
                                     </td>
                                 </tr>
                             }
@@ -122,6 +122,7 @@ pub fn SpoolShow() -> impl IntoView {
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let spool = create_resource(id, |id| async move { api::get_spool(id).await });
     let navigate = use_navigate();
+    let navigate_clone = navigate.clone();
 
     let on_delete = move |_| {
         let id = id();
@@ -135,7 +136,7 @@ pub fn SpoolShow() -> impl IntoView {
 
     let on_clone = move |_| {
         let id = id();
-        let navigate = navigate.clone();
+        let navigate = navigate_clone.clone();
         spawn_local(async move {
             if let Ok(new) = api::clone_spool(id).await {
                 navigate(&format!("/spools/{}", new.spool.id), Default::default());
@@ -145,18 +146,21 @@ pub fn SpoolShow() -> impl IntoView {
 
     view! {
         <div class="page spool-show">
+            // Action buttons are outside the reactive Suspense block because
+            // on_clone and on_delete use the `id` signal directly, not `sr`.
+            // Placing them inside {move ||...} would make that closure FnOnce.
+            <div class="page-header">
+                <h1>"Spool #"{move || id()}</h1>
+                <div class="page-actions">
+                    <a href=move || format!("/spools/{}/edit", id()) class="btn ">"Edit"</a>
+                    <button on:click=on_clone class="btn ">"Clone"</button>
+                    <button on:click=on_delete class="btn btn-danger ">"Delete"</button>
+                </div>
+            </div>
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
                 {move || spool.get().map(|r| match r {
                     Err(e) => view! { <p class="error">{e.to_string()}</p> }.into_view(),
                     Ok(sr) => view! {
-                        <div class="page-header">
-                            <h1>"Spool #"{sr.spool.id}</h1>
-                            <div class="page-actions">
-                                <a href=format!("/spools/{}/edit", sr.spool.id) class="btn">"Edit"</a>
-                                <button on:click=on_clone class="btn">"Clone"</button>
-                                <button on:click=on_delete class="btn btn-danger">"Delete"</button>
-                            </div>
-                        </div>
                         <dl class="detail-grid">
                             <dt>"Filament"</dt><dd>{sr.filament.display_name()}</dd>
                             <dt>"Colors"</dt><dd>{sr.spool.colors.iter().map(|c| {
@@ -184,6 +188,7 @@ pub fn SpoolShow() -> impl IntoView {
         </div>
     }
 }
+
 
 // ── Create ─────────────────────────────────────────────────────────────────────
 
@@ -270,8 +275,8 @@ pub fn SpoolCreate() -> impl IntoView {
                     "Comment"
                     <textarea on:input=move |ev| comment.set(event_target_value(&ev))></textarea>
                 </label>
-                <button type="submit" class="btn btn-primary">"Create"</button>
-                <a href="/spools" class="btn">"Cancel"</a>
+                <button type="submit" class="btn btn-primary ">"Create"</button>
+                <a href="/spools" class="btn ">"Cancel"</a>
             </form>
         </div>
     }
@@ -365,8 +370,8 @@ pub fn SpoolEdit() -> impl IntoView {
                         on:input=move |ev| comment.set(event_target_value(&ev))>
                     </textarea>
                 </label>
-                <button type="submit" class="btn btn-primary">"Save"</button>
-                <a href=move || format!("/spools/{}", id()) class="btn">"Cancel"</a>
+                <button type="submit" class="btn btn-primary ">"Save"</button>
+                <a href=move || format!("/spools/{}", id()) class="btn ">"Cancel"</a>
             </form>
         </div>
     }
