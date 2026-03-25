@@ -6,6 +6,23 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 
 ### Bugs (found via Playwright Docker test, 2026-03-24)
 
+#### ~~B5 Delete Button in Locations~~ (Fixed)
+- **Root cause:** No `.btn:disabled` rule — a disabled `btn-danger` button lost its red styling and looked like the plain, unstyled pagination "← Prev" button.
+- **Fix applied:** Added `.btn:disabled` rule in `style/spoolman.css` that keeps `opacity: 0.45` and `cursor: not-allowed` while preserving the button's color/shape.
+
+### B6 Spools view
+- sorting on remainig (g) not possible
+- sorting on location not possible
+
+### B7 Color's alpha value is not used anywhere
+- the color picker should allow to select an alpha value. if that's not possible add an extra selector elsewhere
+
+### B8 server error in spool edig
+- "HTTP 500: Internal Server Error" when saving changes
+
+### B9 jumps to spool details after edit spool
+- should jump to spool list
+
 #### ~~B4 — No CSS: app is completely unstyled~~ (Fixed in feat/add-css-styling-stylers)
 - **Fix applied:** Added `stylers = "0.3.2"` for scoped component CSS and `style-file = "style/spoolman.css"` in `Leptos.toml` for global CSS (variables, reset, dark mode, buttons, shared page classes). All major components now have `style!` blocks.
 - **Pending:** Visual verification requires Docker/WSL build (cargo-leptos blocked on Windows).
