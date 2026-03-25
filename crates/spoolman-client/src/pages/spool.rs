@@ -1,7 +1,6 @@
 use leptos::*;
 use leptos_router::{use_navigate, use_params_map};
 use spoolman_types::{models::Rgba, requests::{CreateSpool, UpdateSpool}};
-use stylers::style;
 
 use crate::{
     api,
@@ -57,47 +56,7 @@ pub fn SpoolList() -> impl IntoView {
         items.into_iter().skip(start).take(ts.page_size.get()).collect::<Vec<_>>()
     };
 
-    let class_name = style! {"SpoolList",
-        span.color-filter {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        table.data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        table.data-table td {
-            padding: 8px 12px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-        }
-        table.data-table tr:nth-child(even) td {
-            background: var(--row-even);
-        }
-        table.data-table tr:hover td {
-            background: var(--row-hover);
-        }
-        table.data-table tr.archived td {
-            opacity: 0.55;
-            font-style: italic;
-        }
-        table.data-table td.actions {
-            white-space: nowrap;
-        }
-        table.data-table span.color-swatch {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 2px;
-            vertical-align: middle;
-            margin-right: 4px;
-            border: 1px solid var(--border);
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="page spool-list">
             <div class="page-header">
                 <h1>"Spools"</h1>
@@ -217,19 +176,7 @@ pub fn SpoolShow() -> impl IntoView {
         });
     });
 
-    let class_name = style! {"SpoolShow",
-        div.spool-show span.color-swatch {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 3px;
-            vertical-align: middle;
-            margin-right: 4px;
-            border: 1px solid var(--border);
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="page spool-show">
             // Action buttons are outside the reactive Suspense block because
             // on_clone and on_delete use the `id` signal directly, not `sr`.
@@ -321,22 +268,7 @@ pub fn SpoolCreate() -> impl IntoView {
         });
     };
 
-    let class_name = style! {"SpoolCreate",
-        div.spool-create form {
-            display: flex;
-            flex-direction: column;
-            max-width: 480px;
-            gap: 0.5rem;
-        }
-        div.spool-create form label {
-            margin-top: 0.5rem;
-        }
-        div.spool-create h1 {
-            margin-bottom: 1rem;
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="page spool-create">
             <h1>"New Spool"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
@@ -447,22 +379,7 @@ pub fn SpoolEdit() -> impl IntoView {
         });
     };
 
-    let class_name = style! {"SpoolEdit",
-        div.spool-edit form {
-            display: flex;
-            flex-direction: column;
-            max-width: 480px;
-            gap: 0.5rem;
-        }
-        div.spool-edit form label {
-            margin-top: 0.5rem;
-        }
-        div.spool-edit h1 {
-            margin-bottom: 1rem;
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="page spool-edit">
             <h1>"Edit Spool"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}

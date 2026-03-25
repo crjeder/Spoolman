@@ -65,6 +65,111 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.2;
 }
 
+/* ── App shell layout ──────────────────────────────────────────────────────── */
+
+.app-shell {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    min-width: 0;
+    background: var(--bg);
+}
+
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    min-width: 200px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-fg);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+    flex: 1;
+}
+
+.nav-links li {
+    margin: 0;
+}
+
+.nav-links li a {
+    display: block;
+    padding: 8px 1rem;
+    color: var(--sidebar-fg);
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: background 0.1s;
+}
+
+.nav-links li a:hover {
+    background: var(--row-hover);
+    text-decoration: none;
+}
+
+.nav-links li.active a {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--row-even);
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dark-toggle {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px 8px;
+    color: var(--sidebar-fg);
+    cursor: pointer;
+    font-size: 0.8rem;
+    width: 100%;
+    text-align: left;
+}
+
+.dark-toggle:hover {
+    background: var(--row-hover);
+}
+
+.version {
+    font-size: 0.7rem;
+    color: var(--muted);
+}
+
 /* ── Buttons ───────────────────────────────────────────────────────────────── */
 
 .btn {
@@ -178,6 +283,21 @@ body.dark .error {
     border-color: #7a2020;
 }
 
+.success {
+    padding: 10px 14px;
+    background: #edfaed;
+    color: #1a7a1a;
+    border: 1px solid #b3e6b3;
+    border-radius: var(--radius);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+body.dark .success {
+    background: #1a3d1a;
+    color: #7dc87d;
+    border-color: #2d6b2d;
+}
+
 /* ── Detail grid (show pages) ──────────────────────────────────────────────── */
 
 .detail-grid {
@@ -193,4 +313,163 @@ body.dark .error {
 }
 .detail-grid dd {
     margin: 0;
+}
+
+/* ── Data table ────────────────────────────────────────────────────────────── */
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.data-table th,
+.col-header {
+    padding: 8px 12px;
+    text-align: left;
+    background: var(--sidebar-bg);
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--fg);
+}
+
+.col-header.active {
+    color: var(--accent);
+}
+
+.sort-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-weight: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+.sort-btn:hover {
+    text-decoration: underline;
+}
+
+.col-filter {
+    display: block;
+    margin-top: 4px;
+    padding: 3px 6px;
+    width: 100%;
+    font-size: 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--fg);
+}
+
+.data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.data-table tr:nth-child(even) td {
+    background: var(--row-even);
+}
+
+.data-table tr:hover td {
+    background: var(--row-hover);
+}
+
+.data-table tr.archived td {
+    opacity: 0.55;
+    font-style: italic;
+}
+
+.data-table td.actions {
+    white-space: nowrap;
+}
+
+/* ── Color swatch ──────────────────────────────────────────────────────────── */
+
+.color-swatch {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 4px;
+    border: 1px solid var(--border);
+}
+
+/* ── Color filter widget ───────────────────────────────────────────────────── */
+
+.color-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ── Pagination ────────────────────────────────────────────────────────────── */
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 0;
+    font-size: 0.875rem;
+}
+
+.pagination button {
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--fg);
+    cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: var(--row-hover);
+}
+
+.pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    color: var(--muted);
+}
+
+.pagination select {
+    padding: 4px 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--fg);
+}
+
+/* ── Create/edit forms ─────────────────────────────────────────────────────── */
+
+.spool-create form,
+.spool-edit form,
+.filament-create form,
+.filament-edit form,
+.settings-page form {
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    gap: 0.5rem;
+}
+
+/* ── Locations inline-create form ─────────────────────────────────────────── */
+
+.inline-create {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.inline-create input {
+    flex: 1;
+    max-width: 300px;
 }

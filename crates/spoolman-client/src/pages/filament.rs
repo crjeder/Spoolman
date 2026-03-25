@@ -4,8 +4,6 @@ use spoolman_types::{
     models::MaterialType,
     requests::{CreateFilament, UpdateFilament},
 };
-use stylers::style;
-
 use crate::{api, components::{pagination::Pagination, table::ColHeader}, state::use_table_state};
 
 // ── Shared material <select> helper ────────────────────────────────────────────
@@ -63,29 +61,7 @@ pub fn FilamentList() -> impl IntoView {
         items.into_iter().skip(start).take(ts.page_size.get()).collect::<Vec<_>>()
     };
 
-    let class_name = style! {"FilamentList",
-        table.data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        table.data-table td {
-            padding: 8px 12px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-        }
-        table.data-table tr:nth-child(even) td {
-            background: var(--row-even);
-        }
-        table.data-table tr:hover td {
-            background: var(--row-hover);
-        }
-        table.data-table td.actions {
-            white-space: nowrap;
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="page filament-list">
             <div class="page-header">
                 <h1>"Filaments"</h1>
@@ -157,9 +133,7 @@ pub fn FilamentShow() -> impl IntoView {
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let filament = create_resource(id, |id| async move { api::get_filament(id).await });
 
-    let class_name = style! {"FilamentShow", div.filament-show { padding: 1.5rem; } };
-
-    view! { class = class_name,
+    view! {
         <div class="page filament-show">
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
                 {move || filament.get().map(|r| match r {
@@ -236,16 +210,7 @@ pub fn FilamentCreate() -> impl IntoView {
         });
     };
 
-    let class_name = style! {"FilamentCreate",
-        div.filament-create form {
-            display: flex;
-            flex-direction: column;
-            max-width: 480px;
-            gap: 0.5rem;
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="page filament-create">
             <h1>"New Filament"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
@@ -327,16 +292,7 @@ pub fn FilamentEdit() -> impl IntoView {
         });
     };
 
-    let class_name = style! {"FilamentEdit",
-        div.filament-edit form {
-            display: flex;
-            flex-direction: column;
-            max-width: 480px;
-            gap: 0.5rem;
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="page filament-edit">
             <h1>"Edit Filament"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}

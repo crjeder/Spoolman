@@ -1,6 +1,5 @@
 use leptos::*;
 use spoolman_types::requests::{CreateLocation, UpdateLocation};
-use stylers::style;
 
 use crate::api;
 
@@ -54,45 +53,7 @@ pub fn LocationList() -> impl IntoView {
         });
     };
 
-    let class_name = style! {"LocationList",
-        form.inline-create {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        form.inline-create input {
-            flex: 1;
-            max-width: 300px;
-        }
-        table.data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        table.data-table th {
-            padding: 8px 12px;
-            text-align: left;
-            background: var(--sidebar-bg);
-            border-bottom: 2px solid var(--border);
-            font-weight: 600;
-        }
-        table.data-table td {
-            padding: 8px 12px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-        }
-        table.data-table tr:hover td {
-            background: var(--row-hover);
-        }
-        table.data-table td.actions {
-            white-space: nowrap;
-            display: flex;
-            gap: 4px;
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="page location-list">
             <h1>"Locations"</h1>
 

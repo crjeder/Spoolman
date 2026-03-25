@@ -1,5 +1,4 @@
 use leptos::*;
-use stylers::style;
 use crate::api;
 
 #[component]
@@ -25,25 +24,7 @@ pub fn SettingsPage() -> impl IntoView {
         });
     };
 
-    let class_name = style! {"SettingsPage",
-        div.settings-page form {
-            display: flex;
-            flex-direction: column;
-            max-width: 360px;
-            gap: 0.5rem;
-        }
-        p.success {
-            padding: 10px 14px;
-            background: #edfaed;
-            color: #1a7a1a;
-            border: 1px solid #b3e6b3;
-            border-radius: var(--radius);
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="page settings-page">
             <h1>"Settings"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}

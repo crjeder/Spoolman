@@ -1,5 +1,4 @@
 use leptos::*;
-use stylers::style;
 
 #[component]
 pub fn Pagination(
@@ -14,42 +13,7 @@ pub fn Pagination(
 
     let next_disabled = Signal::derive(move || page.get() + 1 >= total_pages());
 
-    let class_name = style! {"Pagination",
-        div.pagination {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0.75rem 0;
-            font-size: 0.875rem;
-        }
-        div.pagination button {
-            padding: 4px 10px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--bg);
-            color: var(--fg);
-            cursor: pointer;
-        }
-        div.pagination button:hover:not(:disabled) {
-            background: var(--row-hover);
-        }
-        div.pagination button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        div.pagination span {
-            color: var(--muted);
-        }
-        div.pagination select {
-            padding: 4px 6px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--bg);
-            color: var(--fg);
-        }
-    };
-
-    view! { class = class_name,
+    view! {
         <div class="pagination">
             <button
                 disabled=move || page.get() == 0
