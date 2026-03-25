@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- CSS styling via `stylers 0.3.2` — every Leptos component now has a scoped `style!` block. Global styles (CSS custom properties, dark-mode overrides, reset, buttons, shared page classes) live in `style/spoolman.css` bundled via `Leptos.toml` `style-file`. The app is no longer completely unstyled (fixes B4).
 - Rust integration test suite — 24 tests covering health, filament, spool, location, and settings endpoints via in-process Axum dispatch; runs with `cargo test -p spoolman-server`, no Docker required.
 
 ### Fixed
