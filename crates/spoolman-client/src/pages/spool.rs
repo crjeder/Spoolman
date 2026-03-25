@@ -350,7 +350,7 @@ pub fn SpoolEdit() -> impl IntoView {
     create_effect(move |_| {
         if let Some(Ok(sr)) = spool.get() {
             current_weight.set(sr.spool.current_weight.to_string());
-            if let Some(c) = sr.spool.colors.as_deref().and_then(|v| v.first()) {
+            if let Some(c) = sr.spool.colors.first() {
                 color_hex.set(format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b));
             }
             color_name.set(sr.spool.color_name.clone().unwrap_or_default());
