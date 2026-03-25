@@ -146,6 +146,7 @@ impl JsonStore {
             .collect();
 
         sort_items(&mut items, sort, order, |f, field| match field {
+            "id" => format!("{:010}", f.id),
             "manufacturer" => f.manufacturer.as_deref().unwrap_or("").to_string(),
             "material" => f.material.as_ref().map(|m| m.abbreviation()).unwrap_or("").to_string(),
             "registered" => f.registered.to_rfc3339(),

@@ -8,17 +8,28 @@ pub mod spool;
 use crate::{config::Config, store::JsonStore};
 use axum::{
     http::{HeaderValue, Method},
+    response::Html,
+    routing::get,
     Router,
 };
+
+/// The SPA shell — embedded at compile time so the server works even when
+/// the cargo-leptos CSR build doesn't generate its own index.html.
+const INDEX_HTML: &str = include_str!("../index.html");
 use tower_http::{
     compression::CompressionLayer,
     cors::{AllowOrigin, CorsLayer},
     trace::TraceLayer,
 };
 
+async fn serve_index() -> Html<&'static str> {
+    Html(INDEX_HTML)
+}
+
 /// Build the full Axum router with all middleware applied.
 pub fn build_router(store: JsonStore, cfg: &Config) -> Router {
     let api = Router::new()
+        .route("/", get(serve_index))
         .nest("/api/v1/filament", filament::router())
         .nest("/api/v1/spool", spool::router())
         .nest("/api/v1/location", location::router())
