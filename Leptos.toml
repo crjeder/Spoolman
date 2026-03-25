@@ -2,6 +2,7 @@
 name = "spoolman-server"
 bin-package = "spoolman-server"
 lib-package = "spoolman-client"
+style-file = "style/spoolman.css"
 
 # The site root folder is where cargo-leptos generates all output.
 # NOTE: all content of this folder will be deleted on a rebuild.

@@ -11,6 +11,7 @@ members = [
 name = "spoolman-server"
 bin-package = "spoolman-server"
 lib-package = "spoolman-client"
+style-file = "style/spoolman.css"
 
 # cargo-leptos places compiled WASM assets here.
 site-root = "target/site"

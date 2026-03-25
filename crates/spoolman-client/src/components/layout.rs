@@ -47,7 +47,7 @@ fn Sidebar() -> impl IntoView {
     view! {
         <nav class="sidebar">
             <div class="sidebar-header">
-                <span class="logo ">"Spoolman"</span>
+                <span class="logo">"Spoolman"</span>
             </div>
             <ul class="nav-links">
                 <li class=move || if spools_active() { "active" } else { "" }><A href="/spools">"Spools"</A></li>

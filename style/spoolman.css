@@ -1,0 +1,475 @@
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+
+:root {
+    --bg:          #ffffff;
+    --fg:          #1a1a1a;
+    --sidebar-bg:  #f5f5f5;
+    --sidebar-fg:  #333333;
+    --border:      #dddddd;
+    --accent:      #0066cc;
+    --accent-fg:   #ffffff;
+    --danger:      #c0392b;
+    --muted:       #888888;
+    --row-hover:   #f0f0f0;
+    --row-even:    #f9f9f9;
+    --font:        system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --radius:      4px;
+}
+
+body.dark {
+    --bg:          #1a1a1a;
+    --fg:          #e0e0e0;
+    --sidebar-bg:  #222222;
+    --sidebar-fg:  #cccccc;
+    --border:      #444444;
+    --accent:      #4d9fff;
+    --accent-fg:   #ffffff;
+    --danger:      #e74c3c;
+    --muted:       #888888;
+    --row-hover:   #2e2e2e;
+    --row-even:    #252525;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+
+body {
+    margin: 0;
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.5;
+    background: var(--bg);
+    color: var(--fg);
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 0.75rem;
+    line-height: 1.2;
+}
+
+/* ── App shell layout ──────────────────────────────────────────────────────── */
+
+.app-shell {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    min-width: 0;
+    background: var(--bg);
+}
+
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    min-width: 200px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-fg);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+    flex: 1;
+}
+
+.nav-links li {
+    margin: 0;
+}
+
+.nav-links li a {
+    display: block;
+    padding: 8px 1rem;
+    color: var(--sidebar-fg);
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: background 0.1s;
+}
+
+.nav-links li a:hover {
+    background: var(--row-hover);
+    text-decoration: none;
+}
+
+.nav-links li.active a {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--row-even);
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dark-toggle {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px 8px;
+    color: var(--sidebar-fg);
+    cursor: pointer;
+    font-size: 0.8rem;
+    width: 100%;
+    text-align: left;
+}
+
+.dark-toggle:hover {
+    background: var(--row-hover);
+}
+
+.version {
+    font-size: 0.7rem;
+    color: var(--muted);
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--fg);
+    cursor: pointer;
+    font-size: 0.875rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.1s, opacity 0.1s;
+}
+.btn:hover {
+    background: var(--row-hover);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: var(--accent-fg);
+    border-color: var(--accent);
+}
+.btn-primary:hover {
+    opacity: 0.88;
+    background: var(--accent);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+.btn-danger:hover {
+    opacity: 0.88;
+    background: var(--danger);
+}
+
+/* ── Form elements ─────────────────────────────────────────────────────────── */
+
+label {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+select,
+textarea {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--fg);
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+/* ── Shared page layout ────────────────────────────────────────────────────── */
+
+.page {
+    padding: 1.5rem;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+.page-header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.page-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+/* ── Error / feedback ──────────────────────────────────────────────────────── */
+
+.error {
+    padding: 10px 14px;
+    background: #fdecea;
+    color: var(--danger);
+    border: 1px solid #f5c6cb;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+body.dark .error {
+    background: #3d1a1a;
+    border-color: #7a2020;
+}
+
+.success {
+    padding: 10px 14px;
+    background: #edfaed;
+    color: #1a7a1a;
+    border: 1px solid #b3e6b3;
+    border-radius: var(--radius);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+body.dark .success {
+    background: #1a3d1a;
+    color: #7dc87d;
+    border-color: #2d6b2d;
+}
+
+/* ── Detail grid (show pages) ──────────────────────────────────────────────── */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.5rem 1.5rem;
+    max-width: 600px;
+    margin-bottom: 1.5rem;
+}
+.detail-grid dt {
+    font-weight: 500;
+    color: var(--muted);
+}
+.detail-grid dd {
+    margin: 0;
+}
+
+/* ── Data table ────────────────────────────────────────────────────────────── */
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.data-table th,
+.col-header {
+    padding: 8px 12px;
+    text-align: left;
+    background: var(--sidebar-bg);
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--fg);
+}
+
+.col-header.active {
+    color: var(--accent);
+}
+
+.sort-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-weight: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+.sort-btn:hover {
+    text-decoration: underline;
+}
+
+.col-filter {
+    display: block;
+    margin-top: 4px;
+    padding: 3px 6px;
+    width: 100%;
+    font-size: 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--fg);
+}
+
+.data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.data-table tr:nth-child(even) td {
+    background: var(--row-even);
+}
+
+.data-table tr:hover td {
+    background: var(--row-hover);
+}
+
+.data-table tr.archived td {
+    opacity: 0.55;
+    font-style: italic;
+}
+
+.data-table td.actions {
+    white-space: nowrap;
+}
+
+/* ── Color swatch ──────────────────────────────────────────────────────────── */
+
+.color-swatch {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 4px;
+    border: 1px solid var(--border);
+}
+
+/* ── Color filter widget ───────────────────────────────────────────────────── */
+
+.color-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ── Pagination ────────────────────────────────────────────────────────────── */
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 0;
+    font-size: 0.875rem;
+}
+
+.pagination button {
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--fg);
+    cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: var(--row-hover);
+}
+
+.pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    color: var(--muted);
+}
+
+.pagination select {
+    padding: 4px 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--fg);
+}
+
+/* ── Create/edit forms ─────────────────────────────────────────────────────── */
+
+.spool-create form,
+.spool-edit form,
+.filament-create form,
+.filament-edit form,
+.settings-page form {
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    gap: 0.5rem;
+}
+
+/* ── Locations inline-create form ─────────────────────────────────────────── */
+
+.inline-create {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.inline-create input {
+    flex: 1;
+    max-width: 300px;
+}

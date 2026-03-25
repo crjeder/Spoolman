@@ -4,7 +4,6 @@ use spoolman_types::{
     models::MaterialType,
     requests::{CreateFilament, UpdateFilament},
 };
-
 use crate::{api, components::{pagination::Pagination, table::ColHeader}, state::use_table_state};
 
 // ── Shared material <select> helper ────────────────────────────────────────────
