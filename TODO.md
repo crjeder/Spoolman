@@ -70,11 +70,3 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 
 ### Enhancements
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
-- [ ] Make the Spool list the default landing page
-- [ ] Light theme matching the logo
-- [x] Add CSS Styles using  [stylers = "0.3.2"](https://github.com/abishekatp/stylers)
-- [x] align numbers in columns on right
-- [ ] make Diameter column optional. configured in settings "Same diameter for all Filaments / Spools". add a default diameter setting, too. in filament creation / edit only display the diameter input if above setting is false.
-
-### Data Model
-- Explore move of Net weight from filament to spool
