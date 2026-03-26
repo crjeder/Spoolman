@@ -238,6 +238,8 @@ pub fn SpoolShow() -> impl IntoView {
     // store_value gives Copy semantics so these handlers can be captured
     // by the reactive `move ||` closure inside view! without making it FnOnce.
     let nav1 = navigate.clone();
+    let nav_err = navigate.clone();
+    let confirm_delete = create_rw_signal(false);
     let on_delete = store_value(move |_: web_sys::MouseEvent| {
         let id = id();
         let nav = nav1.clone();
@@ -268,12 +270,29 @@ pub fn SpoolShow() -> impl IntoView {
                 <div class="page-actions">
                     <a href=move || format!("/spools/{}/edit", id()) class="btn ">"Edit"</a>
                     <button on:click=move |e| on_clone.with_value(|f| f(e)) class="btn ">"Clone"</button>
-                    <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-danger ">"Delete"</button>
+                    {move || if confirm_delete.get() {
+                        view! {
+                            <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-danger ">"Sure?"</button>
+                            " "
+                            <button on:click=move |_| confirm_delete.set(false) class="btn ">"Cancel"</button>
+                        }.into_view()
+                    } else {
+                        view! {
+                            <button on:click=move |_| confirm_delete.set(true) class="btn btn-danger ">"Delete"</button>
+                        }.into_view()
+                    }}
                 </div>
             </div>
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
                 {move || spool.get().map(|r| match r {
-                    Err(e) => view! { <p class="error">{e.to_string()}</p> }.into_view(),
+                    Err(e) => {
+                        if e.status == 404 {
+                            nav_err("/spools", Default::default());
+                            view! { <></> }.into_view()
+                        } else {
+                            view! { <p class="error">{e.to_string()}</p> }.into_view()
+                        }
+                    }
                     Ok(sr) => view! {
                         <dl class="detail-grid">
                             <dt>"Filament"</dt><dd>{sr.filament.display_name()}</dd>
