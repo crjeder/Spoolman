@@ -410,6 +410,24 @@ body.dark .success {
     border: 1px solid var(--border);
 }
 
+/* ── Color + alpha row (form) ──────────────────────────────────────────────── */
+
+.color-alpha-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-alpha-row input[type="range"] {
+    width: 100px;
+}
+
+.alpha-pct {
+    font-size: 0.8rem;
+    color: var(--muted);
+    min-width: 3ch;
+}
+
 /* ── Color filter widget ───────────────────────────────────────────────────── */
 
 .color-filter {
