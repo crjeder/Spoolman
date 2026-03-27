@@ -240,9 +240,9 @@ pub fn FilamentCreate() -> impl IntoView {
             let mat = material.get();
             // When uniform mode is on, use the configured default diameter.
             let resolved_diameter = if ds.uniform.get() {
-                ds.default_mm.get()
+                ds.default_mm.get() as f32
             } else {
-                diameter.get().parse().unwrap_or(ds.default_mm.get())
+                diameter.get().parse().unwrap_or(ds.default_mm.get() as f32)
             };
             let body = CreateFilament {
                 manufacturer: Some(manufacturer.get()).filter(|s| !s.is_empty()),
