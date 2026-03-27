@@ -54,8 +54,10 @@ Leptos.toml         # cargo-leptos build config
 
 ## Workflow
 
-Use git worktrees for feature work to keep changes isolated from the current workspace. Before starting any non-trivial implementation, create a worktree on a new branch rather than working directly on the checked-out branch.
-For every non-trivial implementation check crates.io if there is already a crate implementing the functionality.
+- Use git worktrees for feature work to keep changes isolated from the current workspace. Before starting any non-trivial implementation, create a worktree on a new branch rather than working directly on the checked-out branch.
+- For every non-trivial implementation check crates.io if there is already a crate implementing the functionality.
+- use openspec to plan changes and new features
+
 
 when archiving the change, update [CHANGELOG.md](CHANGELOG.md):
 - Put entries under a new version
