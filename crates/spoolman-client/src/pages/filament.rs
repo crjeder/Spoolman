@@ -208,7 +208,7 @@ pub fn FilamentShow() -> impl IntoView {
     let confirm_delete = create_rw_signal(false);
 
     let nav_delete = navigate.clone();
-    let nav_err = navigate.clone();
+    let nav_err = store_value(navigate.clone());
 
     let on_delete = store_value(move |_: web_sys::MouseEvent| {
         let id = id();
@@ -226,7 +226,7 @@ pub fn FilamentShow() -> impl IntoView {
                 {move || filament.get().map(|r| match r {
                     Err(e) => {
                         if e.status == 404 {
-                            nav_err.clone()("/filaments", Default::default());
+                            nav_err.with_value(|f| f("/filaments", Default::default()));
                             view! { <></> }.into_view()
                         } else {
                             view! { <p class="error">{e.to_string()}</p> }.into_view()
