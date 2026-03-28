@@ -48,9 +48,36 @@ Leptos.toml         # cargo-leptos build config
 - **Package manager:** `cargo`
 
 ## Testing
-- use docker to run the code
-- Test data is in assets/spoolman.json
-- Use playwright to test front-end
+
+### E2E (Docker + Playwright)
+
+Run the full end-to-end suite (requires Docker and Node.js; use WSL on Windows):
+
+```bash
+./scripts/run-e2e.sh
+```
+
+This builds the Docker image, starts the container with `assets/spoolman.json` as fixture data, waits for the server, runs Playwright, and tears everything down.
+
+To run Playwright against an already-running container:
+
+```bash
+# In one terminal — start the test container:
+docker compose -f docker-compose.test.yml up --build
+
+# In another terminal — run tests:
+cd tests/e2e
+npm ci
+npx playwright test
+
+# When done:
+docker compose -f docker-compose.test.yml down
+```
+
+Test files live in `tests/e2e/tests/`. Page-Object Models are in `tests/e2e/pages/`.
+
+- Test data: `assets/spoolman.json` (fixture, read-only bind-mount)
+- The test container does NOT touch the development `spoolman_data` volume
 
 ## Workflow
 
