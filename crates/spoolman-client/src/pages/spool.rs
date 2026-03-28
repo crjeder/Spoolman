@@ -18,7 +18,7 @@ pub fn SpoolList() -> impl IntoView {
     let show_archived = create_rw_signal(false);
     let color_pick: RwSignal<Option<String>> = create_rw_signal(None);
     let threshold: RwSignal<u8> = create_rw_signal(10u8);
-    let visible_cols = create_rw_signal(vec![
+    let _visible_cols = create_rw_signal(vec![
         "filament", "color", "remaining_pct", "remaining_weight", "location", "registered",
     ]);
 
@@ -234,13 +234,13 @@ pub fn SpoolShow() -> impl IntoView {
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let spool = create_resource(id, |id| async move { api::get_spool(id).await });
     let navigate = use_navigate();
-    let navigate_clone = navigate.clone();
     let confirm_delete = create_rw_signal(false);
 
     // store_value gives Copy semantics so these handlers can be captured
     // by the reactive `move ||` closure inside view! without making it FnOnce.
-    let nav1 = navigate.clone();
     let nav_err = store_value(navigate.clone());
+    let nav1 = navigate.clone();
+    let navigate_clone = navigate;
     let on_delete = store_value(move |_: web_sys::MouseEvent| {
         let id = id();
         let nav = nav1.clone();

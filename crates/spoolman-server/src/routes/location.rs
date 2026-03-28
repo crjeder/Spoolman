@@ -2,7 +2,7 @@ use axum::{
     Json, Router,
     extract::{Path, State},
     http::StatusCode,
-    routing::{delete, get, patch, post},
+    routing::get,
 };
 use spoolman_types::{
     requests::{CreateLocation, UpdateLocation},

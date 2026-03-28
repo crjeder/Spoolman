@@ -2,7 +2,7 @@ use axum::{
     Json, Router,
     extract::{Path, Query, State},
     http::{HeaderMap, HeaderValue},
-    routing::{delete, get, patch, post},
+    routing::get,
 };
 use serde::Deserialize;
 use spoolman_types::{
