@@ -18,6 +18,7 @@ pub fn LocationList() -> impl IntoView {
 
     // Pending-delete confirmation: holds the id of the row awaiting confirmation.
     let confirm_delete: RwSignal<Option<u32>> = create_rw_signal(None);
+    let delete_error = create_rw_signal(Option::<String>::None);
 
     let on_create = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
@@ -50,9 +51,12 @@ pub fn LocationList() -> impl IntoView {
 
     let on_delete = move |id: u32| {
         spawn_local(async move {
-            if api::delete_location(id).await.is_ok() {
-                confirm_delete.set(None);
-                version.update(|v| *v += 1);
+            match api::delete_location(id).await {
+                Ok(()) => {
+                    confirm_delete.set(None);
+                    version.update(|v| *v += 1);
+                }
+                Err(e) => delete_error.set(Some(e.to_string())),
             }
         });
     };
@@ -61,6 +65,7 @@ pub fn LocationList() -> impl IntoView {
         <div class="page location-list">
             <h1>"Locations"</h1>
 
+            {move || delete_error.get().map(|e| view! { <p class="error">{e}</p> })}
             // Create form
             <form class="inline-create" on:submit=on_create>
                 {move || create_error.get().map(|e| view! { <p class="error">{e}</p> })}
@@ -124,14 +129,6 @@ pub fn LocationList() -> impl IntoView {
                                                     " "
                                                     <button class="btn "
                                                         on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
-                                                }.into_view()
-                                            } else if confirm_delete.get() == Some(id) {
-                                                view! {
-                                                    <span class="confirm-prompt">"Sure?"</span>
-                                                    " "
-                                                    <button class="btn btn-danger " on:click=move |_| on_delete(id)>"Yes, delete"</button>
-                                                    " "
-                                                    <button class="btn " on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
                                                 }.into_view()
                                             } else {
                                                 let n = name_for_actions.clone();

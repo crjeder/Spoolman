@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Spool create and edit dialogs now reject the form with an error message when no location is selected — previously the form submitted with `location_id: None` silently (fixes B16).
 
 - Help page had three issues: the "Data file" section linked to `/api/v1/setting` (returns an empty map) with misleading text; the NFC section displayed the literal text `&lt;id&gt;` instead of `<id>` due to double-escaping in the Leptos text node; and no `/info` endpoint existed. Added `GET /api/v1/info` (returns `{ version, data_file }`), updated the link and label to point to `/api/v1/info`, and corrected the NFC URL string (fixes B17).
+- `/api/v1/info` returned empty — the client was fetching `/info` but the route is mounted at `/api/v1/info`; corrected the client path.
 
 - Opacity (alpha) of spool colours was hardcoded to 255 — the native `<input type="color">` element has no alpha channel. Added an `<input type="range">` opacity slider (0–255) next to the colour picker in both the create and edit spool forms. The current percentage is shown as a label; the edit form pre-fills the slider from the saved colour's alpha value (fixes B7).
 

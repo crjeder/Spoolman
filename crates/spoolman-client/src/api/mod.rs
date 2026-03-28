@@ -95,7 +95,7 @@ pub async fn delete(path: &str) -> Result<(), ApiError> {
 // ── Info ──────────────────────────────────────────────────────────────────────
 
 pub async fn fetch_info() -> Result<InfoResponse, ApiError> {
-    get("/info").await
+    get("/api/v1/info").await
 }
 
 // ── Settings ──────────────────────────────────────────────────────────────────
