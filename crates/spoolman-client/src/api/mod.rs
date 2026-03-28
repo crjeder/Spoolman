@@ -6,11 +6,8 @@
 
 use gloo_net::http::Request;
 use spoolman_types::{
-    requests::{
-        CreateFilament, CreateLocation, CreateSpool, PutSetting, UpdateFilament, UpdateLocation,
-        UpdateSpool,
-    },
-    responses::{FilamentResponse, InfoResponse, LocationResponse, SpoolResponse, SpoolmanDbEntry},
+    requests::PutSetting,
+    responses::{InfoResponse, SpoolmanDbEntry},
 };
 
 pub mod filament;
