@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CSS styling via `stylers 0.3.2` — every Leptos component now has a scoped `style!` block. Global styles (CSS custom properties, dark-mode overrides, reset, buttons, shared page classes) live in `style/spoolman.css` bundled via `Leptos.toml` `style-file`. The app is no longer completely unstyled (fixes B4).
 - Rust integration test suite — 24 tests covering health, filament, spool, location, and settings endpoints via in-process Axum dispatch; runs with `cargo test -p spoolman-server`, no Docker required.
 
+### Removed
+
+- `remaining_pct` field dropped from `SpoolResponse` API and all UI surfaces (spool list column, spool detail row). The value was redundant — derivable as `remaining_filament / net_weight × 100` — and only meaningful when `net_weight` is set, causing confusing "unknown" states otherwise.
+
 ### Fixed
 
 - Spool detail view now shows `first_used` alongside `registered` and `last_used`, with dates formatted as human-readable `YYYY-MM-DD HH:MM UTC` instead of raw RFC 3339. The edit form gains `First used` and `Last used` datetime-local inputs that round-trip dates through the `UpdateSpool` API (fixes B14).

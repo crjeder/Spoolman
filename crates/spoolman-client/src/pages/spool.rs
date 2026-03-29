@@ -19,7 +19,7 @@ pub fn SpoolList() -> impl IntoView {
     let color_pick: RwSignal<Option<String>> = create_rw_signal(None);
     let threshold: RwSignal<u8> = create_rw_signal(10u8);
     let _visible_cols = create_rw_signal(vec![
-        "filament", "color", "remaining_pct", "remaining_weight", "location", "registered",
+        "filament", "color", "remaining_weight", "location", "registered",
     ]);
 
     let version = create_rw_signal(0u32);
@@ -80,15 +80,6 @@ pub fn SpoolList() -> impl IntoView {
                         .cmp(&b.filament.display_name().to_lowercase());
                     if asc { ord } else { ord.reverse() }
                 }
-                "remaining_pct" => match (a.remaining_pct, b.remaining_pct) {
-                    (None, None) => Ordering::Equal,
-                    (None, _) => Ordering::Greater,
-                    (_, None) => Ordering::Less,
-                    (Some(av), Some(bv)) => {
-                        let ord = av.partial_cmp(&bv).unwrap_or(Ordering::Equal);
-                        if asc { ord } else { ord.reverse() }
-                    }
-                },
                 "remaining_weight" => match (a.remaining_filament, b.remaining_filament) {
                     (None, None) => Ordering::Equal,
                     (None, _) => Ordering::Greater,
@@ -167,7 +158,6 @@ pub fn SpoolList() -> impl IntoView {
                             <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Color"</th>
-                            <ColHeader label="Remaining%" field="remaining_pct" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Remaining (g)" field="remaining_weight" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Location"      field="location"          sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
@@ -180,7 +170,6 @@ pub fn SpoolList() -> impl IntoView {
                             let name = sr.filament.display_name();
                             let color = sr.spool.colors.first().cloned()
                                 .unwrap_or(Rgba { r: 200, g: 200, b: 200, a: 255 });
-                            let pct = sr.remaining_pct.map(|p| format!("{:.0}%", p)).unwrap_or_default();
                             let rem = sr.remaining_filament.map(|w| format!("{:.0}g", w)).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
@@ -193,7 +182,6 @@ pub fn SpoolList() -> impl IntoView {
                                         </span>
                                         {sr.spool.color_name.clone().unwrap_or_default()}
                                     </td>
-                                    <td class="num">{pct}</td>
                                     <td class="num">{rem}</td>
                                     <td>{sr.spool.location_id.map(|l| l.to_string()).unwrap_or_default()}</td>
                                     <td>{sr.spool.registered.format("%Y-%m-%d").to_string()}</td>
@@ -233,6 +221,7 @@ pub fn SpoolShow() -> impl IntoView {
     let params = use_params_map();
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let spool = create_resource(id, |id| async move { api::get_spool(id).await });
+    let locations = create_resource(|| (), |_| async { api::list_locations().await });
     let navigate = use_navigate();
     let confirm_delete = create_rw_signal(false);
 
@@ -300,6 +289,16 @@ pub fn SpoolShow() -> impl IntoView {
                     Ok(sr) => view! {
                         <dl class="detail-grid">
                             <dt>"Filament"</dt><dd>{sr.filament.display_name()}</dd>
+                            <dt>"Location"</dt><dd>{
+                                move || match sr.spool.location_id {
+                                    None => "—".to_string(),
+                                    Some(loc_id) => locations.get()
+                                        .and_then(|r| r.ok())
+                                        .and_then(|ls| ls.into_iter().find(|l| l.location.id == loc_id))
+                                        .map(|l| l.location.name)
+                                        .unwrap_or_else(|| loc_id.to_string()),
+                                }
+                            }</dd>
                             <dt>"Colors"</dt><dd>{sr.spool.colors.iter().map(|c| {
                                 view! {
                                     <span class="color-swatch"
@@ -313,7 +312,6 @@ pub fn SpoolShow() -> impl IntoView {
                             <dt>"Current weight"</dt><dd>{format!("{:.1}g", sr.spool.current_weight)}</dd>
                             <dt>"Used"</dt><dd>{format!("{:.1}g", sr.used_weight)}</dd>
                             <dt>"Remaining filament"</dt><dd>{sr.remaining_filament.map(|w| format!("{:.1}g", w)).unwrap_or_else(|| "unknown".into())}</dd>
-                            <dt>"Remaining %"</dt><dd>{sr.remaining_pct.map(|p| format!("{:.0}%", p)).unwrap_or_else(|| "unknown".into())}</dd>
                             <dt>"Registered"</dt><dd>{sr.spool.registered.format("%Y-%m-%d %H:%M UTC").to_string()}</dd>
                             <dt>"First used"</dt><dd>{sr.spool.first_used.map(|d| d.format("%Y-%m-%d %H:%M UTC").to_string()).unwrap_or_default()}</dd>
                             <dt>"Last used"</dt><dd>{sr.spool.last_used.map(|d| d.format("%Y-%m-%d %H:%M UTC").to_string()).unwrap_or_default()}</dd>

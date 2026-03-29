@@ -6,7 +6,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 
 ### Bugs (found via Playwright Docker test, 2026-03-27)
 ~~1. Settings page: currency symbol renders as `â,¬` instead of `€` — UTF-8 double-encoding in settings page~~
-2. Spool detail (`/spools/<id>`): assigned Location not displayed — Location field missing from detail view
+~~2. Spool detail (`/spools/<id>`): assigned Location not displayed — Location field missing from detail view~~
 ~~3. /api/v1/info is empty~~
 ~~4. delete button in locations is broken~~ (see #9)
 ~~5. "sure?" button (after delete) has no effect~~
@@ -28,6 +28,6 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] table headers contain filter button
 - [ ] move Filament.net_weight to spool.net_weight
 - [ ] add delete buttons wherever edit buttons are
-- [ ] remove "remaining %"
+- ~~remove "remaining %"~~
 - [ ] location must not be empty or "none"
 - [ ] don't care about time. remove from display. if it must be set then set it to 5 min past midnight

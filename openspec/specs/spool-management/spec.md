@@ -60,13 +60,9 @@ The system SHALL derive and return weight metrics in spool responses. Metrics ar
 - **WHEN** a spool is retrieved and the spool has a net_weight
 - **THEN** remaining_filament = spool.net_weight - used_weight is included in the response
 
-#### Scenario: Remaining percentage derived
-- **WHEN** a spool is retrieved and the spool has a net_weight
-- **THEN** remaining_pct = remaining_filament / spool.net_weight × 100 is included in the response
-
-#### Scenario: No metrics when net_weight absent
+#### Scenario: No remaining_filament when net_weight absent
 - **WHEN** a spool is retrieved and spool.net_weight is None
-- **THEN** remaining_filament and remaining_pct are omitted (None) from the response
+- **THEN** remaining_filament is omitted (None) from the response
 
 ### Requirement: Clone spool
 The system SHALL allow cloning an existing spool to create a new spool pre-filled with the same filament_id, colors, color_name, net_weight, and initial_weight.
