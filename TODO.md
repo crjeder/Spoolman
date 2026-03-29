@@ -10,8 +10,8 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 ~~3. /api/v1/info is empty~~
 ~~4. delete button in locations is broken~~ (see #9)
 ~~5. "sure?" button (after delete) has no effect~~
-7. HTTP 404: Not Found on save after edit
-8. save in edit location broken
+~~7. HTTP 404: Not Found on save after edit~~
+~~8. save in edit location broken~~
 
 ### Bugs (found via Playwright E2E test run, 2026-03-28)
 ~~9. **E2E: location delete UI doesn't update after confirm** — fixed: `deleteLocation` helper now waits for the deleted row to become detached instead of `waitForLoadState('networkidle')`.~~
