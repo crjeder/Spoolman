@@ -273,6 +273,34 @@ textarea:focus {
     margin-left: auto;
 }
 
+/* ── Search input with clear button ───────────────────────────────────────── */
+
+.search-input-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.search-input-wrapper input[type="text"] {
+    padding-right: 1.8rem;
+}
+
+.search-clear {
+    position: absolute;
+    right: 0.4rem;
+    background: none;
+    border: none;
+    padding: 0 0.2rem;
+    cursor: pointer;
+    color: var(--text-muted, #888);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.search-clear:hover {
+    color: var(--text, #333);
+}
+
 /* ── Error / feedback ──────────────────────────────────────────────────────── */
 
 .error {

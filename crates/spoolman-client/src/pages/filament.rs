@@ -137,8 +137,16 @@ pub fn FilamentList() -> impl IntoView {
                             view! { <option value=abbr.clone()>{abbr}</option> }
                         }).collect_view()}
                     </select>
-                    <input type="text" placeholder="Filter…"
-                        on:input=move |ev| ts.filter.set(event_target_value(&ev)) />
+                    <div class="search-input-wrapper">
+                        <input type="text" placeholder="Search…"
+                            prop:value=move || ts.filter.get()
+                            on:input=move |ev| ts.filter.set(event_target_value(&ev)) />
+                        {move || (!ts.filter.get().is_empty()).then(|| view! {
+                            <button type="button" class="search-clear"
+                                on:click=move |_| ts.filter.set(String::new())
+                            >"×"</button>
+                        })}
+                    </div>
                     <a href="/filaments/new" class="btn btn-primary ">"+ New Filament"</a>
                 </div>
             </div>

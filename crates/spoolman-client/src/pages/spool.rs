@@ -1,4 +1,4 @@
-use chrono::{DateTime, NaiveDateTime, Utc};
+use chrono::{DateTime, NaiveDate, Utc};
 use leptos::*;
 use leptos_router::{use_navigate, use_params_map};
 use spoolman_types::{models::Rgba, requests::{CreateSpool, UpdateSpool}};
@@ -120,10 +120,16 @@ pub fn SpoolList() -> impl IntoView {
             <div class="page-header">
                 <h1>"Spools"</h1>
                 <div class="page-actions">
-                    <input
-                        type="text" placeholder="Filter…"
-                        on:input=move |ev| ts.filter.set(event_target_value(&ev))
-                    />
+                    <div class="search-input-wrapper">
+                        <input type="text" placeholder="Search…"
+                            prop:value=move || ts.filter.get()
+                            on:input=move |ev| ts.filter.set(event_target_value(&ev)) />
+                        {move || (!ts.filter.get().is_empty()).then(|| view! {
+                            <button type="button" class="search-clear"
+                                on:click=move |_| ts.filter.set(String::new())
+                            >"×"</button>
+                        })}
+                    </div>
                     <label>
                         <input type="checkbox"
                             on:change=move |ev| show_archived.set(event_target_checked(&ev))
@@ -312,9 +318,9 @@ pub fn SpoolShow() -> impl IntoView {
                             <dt>"Current weight"</dt><dd>{format!("{:.1}g", sr.spool.current_weight)}</dd>
                             <dt>"Used"</dt><dd>{format!("{:.1}g", sr.used_weight)}</dd>
                             <dt>"Remaining filament"</dt><dd>{sr.remaining_filament.map(|w| format!("{:.1}g", w)).unwrap_or_else(|| "unknown".into())}</dd>
-                            <dt>"Registered"</dt><dd>{sr.spool.registered.format("%Y-%m-%d %H:%M UTC").to_string()}</dd>
-                            <dt>"First used"</dt><dd>{sr.spool.first_used.map(|d| d.format("%Y-%m-%d %H:%M UTC").to_string()).unwrap_or_default()}</dd>
-                            <dt>"Last used"</dt><dd>{sr.spool.last_used.map(|d| d.format("%Y-%m-%d %H:%M UTC").to_string()).unwrap_or_default()}</dd>
+                            <dt>"Registered"</dt><dd>{sr.spool.registered.format("%Y-%m-%d").to_string()}</dd>
+                            <dt>"First used"</dt><dd>{sr.spool.first_used.map(|d| d.format("%Y-%m-%d").to_string()).unwrap_or_default()}</dd>
+                            <dt>"Last used"</dt><dd>{sr.spool.last_used.map(|d| d.format("%Y-%m-%d").to_string()).unwrap_or_default()}</dd>
                             <dt>"Comment"</dt><dd>{sr.spool.comment.clone().unwrap_or_default()}</dd>
                             <dt>"Archived"</dt><dd>{if sr.spool.archived { "Yes" } else { "No" }}</dd>
                         </dl>
@@ -483,8 +489,8 @@ pub fn SpoolEdit() -> impl IntoView {
             }
             color_name.set(sr.spool.color_name.clone().unwrap_or_default());
             location_id.set(sr.spool.location_id);
-            first_used.set(sr.spool.first_used.map(|d| d.format("%Y-%m-%dT%H:%M").to_string()).unwrap_or_default());
-            last_used.set(sr.spool.last_used.map(|d| d.format("%Y-%m-%dT%H:%M").to_string()).unwrap_or_default());
+            first_used.set(sr.spool.first_used.map(|d| d.format("%Y-%m-%d").to_string()).unwrap_or_default());
+            last_used.set(sr.spool.last_used.map(|d| d.format("%Y-%m-%d").to_string()).unwrap_or_default());
             comment.set(sr.spool.comment.clone().unwrap_or_default());
         }
     });
@@ -500,7 +506,9 @@ pub fn SpoolEdit() -> impl IntoView {
         spawn_local(async move {
             let parse_dt = |s: String| -> Option<DateTime<Utc>> {
                 if s.is_empty() { return None; }
-                NaiveDateTime::parse_from_str(&s, "%Y-%m-%dT%H:%M").ok().map(|ndt| ndt.and_utc())
+                NaiveDate::parse_from_str(&s, "%Y-%m-%d").ok()
+                    .and_then(|d| d.and_hms_opt(0, 5, 0))
+                    .map(|ndt| ndt.and_utc())
             };
             let body = UpdateSpool {
                 current_weight: current_weight.get().parse::<f32>().ok(),
@@ -576,13 +584,13 @@ pub fn SpoolEdit() -> impl IntoView {
                 </label>
                 <label>
                     "First used"
-                    <input type="datetime-local"
+                    <input type="date"
                         prop:value=move || first_used.get()
                         on:input=move |ev| first_used.set(event_target_value(&ev)) />
                 </label>
                 <label>
                     "Last used"
-                    <input type="datetime-local"
+                    <input type="date"
                         prop:value=move || last_used.get()
                         on:input=move |ev| last_used.set(event_target_value(&ev)) />
                 </label>

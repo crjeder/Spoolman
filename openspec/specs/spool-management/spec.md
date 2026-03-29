@@ -97,7 +97,7 @@ Each spool SHALL be addressable at a stable URL suitable for use as the OpenTag3
 - **THEN** the Online Data URL field contains "<host>/api/v1/spool/12345"
 
 ### Requirement: Spool list UI
-The frontend SHALL provide a spool list page with sortable columns, server-side filtering, pagination, and column visibility toggle. Archived spools SHALL be togglable via a button. The spool list page SHALL be the default landing page of the application, rendered at both `"/"` and `"/spools"`. The `"/"` route SHALL render the spool list component directly without a redirect. The Spools navigation link SHALL appear active when the current path is either `"/"` or `"/spools"`.
+The frontend SHALL provide a spool list page with sortable columns, server-side filtering, pagination, and column visibility toggle. Archived spools SHALL be togglable via a button. The spool list page SHALL be the default landing page of the application, rendered at both `"/"` and `"/spools"`. The `"/"` route SHALL render the spool list component directly without a redirect. The Spools navigation link SHALL appear active when the current path is either `"/"` or `"/spools"`. The page SHALL include a text search input labeled "Search" (placeholder "Search…") that filters rows client-side. A clear ("×") button SHALL appear inside the search input when it has a value; clicking it SHALL empty the input and reset the list.
 
 #### Scenario: Default list shows active spools
 - **WHEN** the spool list page loads
@@ -114,3 +114,53 @@ The frontend SHALL provide a spool list page with sortable columns, server-side 
 #### Scenario: Nav link is active at root path
 - **WHEN** the current path is `"/"`
 - **THEN** the Spools navigation link is highlighted as active
+
+#### Scenario: Search filters spools
+- **WHEN** the user types in the search input
+- **THEN** only spools whose display name contains the typed text (case-insensitive) are shown
+
+#### Scenario: Clear button appears with input
+- **WHEN** the search input contains at least one character
+- **THEN** a "×" clear button is visible inside the input
+
+#### Scenario: Clear button hidden when empty
+- **WHEN** the search input is empty
+- **THEN** no clear button is shown
+
+#### Scenario: Clear button resets list
+- **WHEN** the user clicks the "×" clear button
+- **THEN** the search input is emptied and all spools are shown
+
+### Requirement: Date-only timestamp display
+The frontend SHALL display all spool timestamps (`registered`, `first_used`, `last_used`) as date-only values in `YYYY-MM-DD` format. Time-of-day SHALL NOT be shown anywhere in the spool UI.
+
+#### Scenario: Registered date shown without time
+- **WHEN** a spool's detail panel is open
+- **THEN** `registered` is displayed as `YYYY-MM-DD` with no time component
+
+#### Scenario: First used shown without time
+- **WHEN** a spool has a `first_used` value and the detail panel is open
+- **THEN** `first_used` is displayed as `YYYY-MM-DD` with no time component
+
+#### Scenario: Last used shown without time
+- **WHEN** a spool has a `last_used` value and the detail panel is open
+- **THEN** `last_used` is displayed as `YYYY-MM-DD` with no time component
+
+### Requirement: Date-only edit inputs for spool timestamps
+The spool edit form SHALL use date-only inputs (not datetime-local) for `first_used` and `last_used`. When those values are submitted to the API, the time component SHALL be fixed to `00:05:00 UTC`.
+
+#### Scenario: Edit form shows date picker for first_used
+- **WHEN** the spool edit form is open
+- **THEN** the `first_used` field is a date input (not a datetime-local input)
+
+#### Scenario: Edit form shows date picker for last_used
+- **WHEN** the spool edit form is open
+- **THEN** the `last_used` field is a date input (not a datetime-local input)
+
+#### Scenario: Submitted date gets fixed time component
+- **WHEN** the user sets `first_used` to `2024-03-15` and saves
+- **THEN** the API receives `2024-03-15T00:05:00Z` for `first_used`
+
+#### Scenario: Existing datetime populates date field
+- **WHEN** a spool with `first_used = 2024-03-15T14:32:00Z` is loaded into the edit form
+- **THEN** the date input shows `2024-03-15` (date only, time discarded)
