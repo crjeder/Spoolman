@@ -53,4 +53,4 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [ ] handling of alpha value in color search needs to be better
 - [ ] take surface finish into account for color search
 - [ ] add material column in spools. table head links to a filter (drop down) to select materials to display
-
+- [ ] make the threshold values configurable per calculation algorithm (in settings)
