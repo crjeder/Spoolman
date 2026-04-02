@@ -1,4 +1,4 @@
-use crate::{api, state::diameter_settings};
+use crate::{api, state::{diameter_settings, color_distance_algorithm}, utils::color::ColorAlgorithm};
 use leptos::*;
 
 #[component]
@@ -12,6 +12,10 @@ pub fn SettingsPage() -> impl IntoView {
     let ds = diameter_settings();
     let uniform = create_rw_signal(true);
     let default_mm = create_rw_signal("1.75".to_string());
+
+    // Color distance algorithm — read from shared context; local copy for the form.
+    let cda = color_distance_algorithm();
+    let algo = create_rw_signal(ColorAlgorithm::Ciede2000);
 
     create_effect(move |_| {
         if let Some(Ok(s)) = settings.get() {
@@ -29,14 +33,21 @@ pub fn SettingsPage() -> impl IntoView {
                 s.get("default_diameter")
                     .cloned()
                     .unwrap_or_else(|| "1.75".into()),
-            );
-        }
+            );            if let Some(algo_str) = s.get("color_distance_algorithm") {
+                let algo_val = match algo_str.as_str() {
+                    "oklab" => ColorAlgorithm::OkLab,
+                    "din99d" => ColorAlgorithm::Din99d,
+                    _ => ColorAlgorithm::Ciede2000,
+                };
+                algo.set(algo_val);
+            }        }
     });
 
     let on_submit = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
         let uniform_val = uniform.get();
         let default_mm_val = default_mm.get();
+        let algo_val = algo.get();
         spawn_local(async move {
             let r1 = api::put_setting("currency_symbol", currency.get()).await;
             let r2 = api::put_setting(
@@ -49,17 +60,24 @@ pub fn SettingsPage() -> impl IntoView {
             )
             .await;
             let r3 = api::put_setting("default_diameter", default_mm_val.clone()).await;
-            match (r1, r2, r3) {
-                (Ok(_), Ok(_), Ok(_)) => {
+            let algo_str = match algo_val {
+                ColorAlgorithm::Ciede2000 => "ciede2000",
+                ColorAlgorithm::OkLab => "oklab",
+                ColorAlgorithm::Din99d => "din99d",
+            };
+            let r4 = api::put_setting("color_distance_algorithm", algo_str.to_string()).await;
+            match (r1, r2, r3, r4) {
+                (Ok(_), Ok(_), Ok(_), Ok(_)) => {
                     // Update the app-wide context signals so other components
                     // see the change without a reload.
                     ds.uniform.set(uniform_val);
                     if let Ok(v) = default_mm_val.parse::<f64>() {
                         ds.default_mm.set(v);
                     }
+                    cda.0.set(algo_val);
                     saved.set(true);
                 }
-                (Err(e), _, _) | (_, Err(e), _) | (_, _, Err(e)) => {
+                (Err(e), _, _, _) | (_, Err(e), _, _) | (_, _, Err(e), _) | (_, _, _, Err(e)) => {
                     error.set(Some(e.to_string()));
                 }
             }
@@ -101,6 +119,31 @@ pub fn SettingsPage() -> impl IntoView {
                             default_mm.set(event_target_value(&ev));
                         }
                     />
+                </label>
+                <label>
+                    "Color distance algorithm"
+                    <select
+                        on:change=move |ev| {
+                            saved.set(false);
+                            let val = event_target_value(&ev);
+                            let algo_val = match val.as_str() {
+                                "oklab" => ColorAlgorithm::OkLab,
+                                "din99d" => ColorAlgorithm::Din99d,
+                                _ => ColorAlgorithm::Ciede2000,
+                            };
+                            algo.set(algo_val);
+                        }
+                    >
+                        <option value="ciede2000" selected=move || matches!(algo.get(), ColorAlgorithm::Ciede2000)>
+                            "CIEDE2000 (default)"
+                        </option>
+                        <option value="oklab" selected=move || matches!(algo.get(), ColorAlgorithm::OkLab)>
+                            "OKLab"
+                        </option>
+                        <option value="din99d" selected=move || matches!(algo.get(), ColorAlgorithm::Din99d)>
+                            "DIN99d"
+                        </option>
+                    </select>
                 </label>
                 <button type="submit" class="btn btn-primary ">"Save"</button>
             </form>

@@ -2,6 +2,7 @@
 
 use leptos::*;
 use web_sys::window;
+use crate::utils::color::ColorAlgorithm;
 
 // ── Diameter settings ──────────────────────────────────────────────────────────
 
@@ -31,6 +32,18 @@ pub struct CurrencySymbol(pub RwSignal<String>);
 /// Read the `CurrencySymbol` from context.
 pub fn currency_symbol() -> CurrencySymbol {
     expect_context::<CurrencySymbol>()
+}
+
+// ── Color distance algorithm ───────────────────────────────────────────────────
+
+/// Reactive color distance algorithm provided via Leptos context from `App`.
+/// Mirrors the `color_distance_algorithm` setting (default `ColorAlgorithm::Ciede2000`).
+#[derive(Clone, Copy)]
+pub struct ColorDistanceAlgorithm(pub RwSignal<ColorAlgorithm>);
+
+/// Read the `ColorDistanceAlgorithm` from context.
+pub fn color_distance_algorithm() -> ColorDistanceAlgorithm {
+    expect_context::<ColorDistanceAlgorithm>()
 }
 
 #[derive(Clone, Debug)]

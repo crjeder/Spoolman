@@ -1,5 +1,16 @@
 use deltae::{DEMethod::DE2000, DeltaE, LabValue};
+use oklab::{LinearRgb, Oklab};
 use spoolman_types::models::Rgba;
+
+// ── Color Distance Algorithms ────────────────────────────────────────────────
+
+/// Supported color distance algorithms for perceptual color matching.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum ColorAlgorithm {
+    Ciede2000,
+    OkLab,
+    Din99d,
+}
 
 // ── sRGB → CIE L*a*b* conversion ───────────────────────────────────────────
 
@@ -65,10 +76,72 @@ fn rgba_to_lab(c: &Rgba) -> LabValue {
 ///   < 1   → imperceptible difference
 ///   < 10  → similar colours
 ///   > 25  → clearly distinct colours
-pub fn color_distance(a: &Rgba, b: &Rgba) -> f32 {
+pub fn color_distance(a: &Rgba, b: &Rgba, algo: ColorAlgorithm) -> f32 {
+    match algo {
+        ColorAlgorithm::Ciede2000 => ciede2000_distance(a, b),
+        ColorAlgorithm::OkLab => oklab_distance(a, b),
+        ColorAlgorithm::Din99d => din99d_distance(a, b),
+    }
+}
+
+/// CIEDE2000 distance using the deltae crate.
+fn ciede2000_distance(a: &Rgba, b: &Rgba) -> f32 {
     let lab_a = rgba_to_lab(a);
     let lab_b = rgba_to_lab(b);
     *DeltaE::new(&lab_a, &lab_b, DE2000).value()
+}
+
+/// OKLab distance using the oklab crate.
+fn oklab_distance(a: &Rgba, b: &Rgba) -> f32 {
+    let oklab_a = Oklab::from_linear_rgb(LinearRgb {
+        r: srgb_channel_to_linear(a.r),
+        g: srgb_channel_to_linear(a.g),
+        b: srgb_channel_to_linear(a.b),
+    });
+    let oklab_b = Oklab::from_linear_rgb(LinearRgb {
+        r: srgb_channel_to_linear(b.r),
+        g: srgb_channel_to_linear(b.g),
+        b: srgb_channel_to_linear(b.b),
+    });
+    let dl = oklab_a.l - oklab_b.l;
+    let da = oklab_a.a - oklab_b.a;
+    let db = oklab_a.b - oklab_b.b;
+    (dl * dl + da * da + db * db).sqrt()
+}
+
+/// DIN99d distance using the DIN 6176:2001 transform on CIE L*a*b*.
+fn din99d_distance(a: &Rgba, b: &Rgba) -> f32 {
+    let lab_a = rgba_to_lab(a);
+    let lab_b = rgba_to_lab(b);
+    let din99d_a = lab_to_din99d(&lab_a);
+    let din99d_b = lab_to_din99d(&lab_b);
+    ((din99d_a.0 - din99d_b.0).powi(2) + (din99d_a.1 - din99d_b.1).powi(2) + (din99d_a.2 - din99d_b.2).powi(2)).sqrt()
+}
+
+/// Convert CIE L*a*b* to DIN99d coordinates.
+fn lab_to_din99d(lab: &LabValue) -> (f32, f32, f32) {
+    let l99 = 105.51 * (lab.l / 100.0 + 0.0158).ln();
+    let a99 = 0.7 * (lab.a / 100.0) + 0.048 * (lab.b / 100.0);
+    let b99 = 0.045 * (lab.a / 100.0) + 1.05 * (lab.b / 100.0);
+    (l99, a99, b99)
+}
+
+/// Per-algorithm threshold constants for color similarity levels.
+/// Returns the maximum ΔE value for the given level.
+pub fn threshold_for(level: &str, algo: ColorAlgorithm) -> Option<f32> {
+    match (level, algo) {
+        ("off", _) => None,
+        ("same", ColorAlgorithm::Ciede2000) => Some(2.3),
+        ("close", ColorAlgorithm::Ciede2000) => Some(10.0),
+        ("ballpark", ColorAlgorithm::Ciede2000) => Some(25.0),
+        ("same", ColorAlgorithm::OkLab) => Some(0.02),
+        ("close", ColorAlgorithm::OkLab) => Some(0.08),
+        ("ballpark", ColorAlgorithm::OkLab) => Some(0.2),
+        ("same", ColorAlgorithm::Din99d) => Some(2.0),
+        ("close", ColorAlgorithm::Din99d) => Some(8.0),
+        ("ballpark", ColorAlgorithm::Din99d) => Some(20.0),
+        _ => None,
+    }
 }
 
 /// Parse a `#rrggbb` hex string (as produced by `<input type="color">`)

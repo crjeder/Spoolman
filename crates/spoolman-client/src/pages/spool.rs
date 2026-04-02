@@ -11,7 +11,7 @@ use crate::{
     components::{pagination::Pagination, table::ColHeader},
     format,
     state::use_table_state,
-    utils::color::{color_distance, hex_to_rgba},
+    utils::color::{color_distance, hex_to_rgba, ColorAlgorithm},
 };
 
 // ── List ───────────────────────────────────────────────────────────────────────
@@ -91,7 +91,7 @@ pub fn SpoolList() -> impl IntoView {
                             s.spool
                                 .colors
                                 .iter()
-                                .any(|c| color_distance(c, &target) <= thresh)
+                                .any(|c| color_distance(c, &target, ColorAlgorithm::Ciede2000) <= thresh)
                         }
                     }
                 };
@@ -115,7 +115,7 @@ pub fn SpoolList() -> impl IntoView {
                     s.spool
                         .colors
                         .iter()
-                        .map(|c| color_distance(c, &target))
+                        .map(|c| color_distance(c, &target, ColorAlgorithm::Ciede2000))
                         .fold(f32::MAX, f32::min)
                 };
                 items.sort_by(|a, b| {
