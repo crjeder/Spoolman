@@ -45,18 +45,18 @@ The system SHALL support computing perceptual color difference using the DIN99d 
 - **THEN** the returned DIN99d ΔE is greater than 25.0
 
 ### Requirement: Per-algorithm thresholds for color search levels
-The system SHALL map the color search level labels (Fine, Medium, Coarse) to algorithm-appropriate numeric thresholds. The thresholds SHALL be:
+The system SHALL map the color search level labels (Same, Close, Ballpark) to algorithm-appropriate numeric thresholds. The thresholds SHALL be:
 
-| Level  | CIEDE2000 | OKLab | DIN99d |
-|--------|-----------|-------|--------|
-| Fine   | 10.0      | 0.10  | 10.0   |
-| Medium | 20.0      | 0.20  | 20.0   |
-| Coarse | 35.0      | 0.35  | 35.0   |
+| Level    | CIEDE2000 | OKLab | DIN99d |
+|----------|-----------|-------|--------|
+| Same     | 10.0      | 0.10  | 10.0   |
+| Close    | 20.0      | 0.20  | 20.0   |
+| Ballpark | 35.0      | 0.35  | 35.0   |
 
-#### Scenario: OKLab Fine threshold is 0.10
-- **WHEN** OKLab is the active algorithm and the level is "Fine"
+#### Scenario: OKLab Same threshold is 0.10
+- **WHEN** OKLab is the active algorithm and the level is "Same"
 - **THEN** spools are included only if any stored color has ΔE_ok ≤ 0.10 from the selected color
 
-#### Scenario: DIN99d Coarse threshold is 35.0
-- **WHEN** DIN99d is the active algorithm and the level is "Coarse"
+#### Scenario: DIN99d Ballpark threshold is 35.0
+- **WHEN** DIN99d is the active algorithm and the level is "Ballpark"
 - **THEN** spools are included only if any stored color has DIN99d ΔE ≤ 35.0 from the selected color

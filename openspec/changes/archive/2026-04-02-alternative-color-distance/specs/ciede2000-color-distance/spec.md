@@ -16,5 +16,5 @@ The spool list color search filter SHALL compare the color distance returned by 
 - **THEN** all spools are shown regardless of their colors
 
 #### Scenario: Default algorithm (CIEDE2000) preserves existing behavior
-- **WHEN** the `color_distance_algorithm` setting is absent and level is "Fine"
+- **WHEN** the `color_distance_algorithm` setting is absent and level is "Same"
 - **THEN** the threshold applied is 10.0 on the CIEDE2000 ΔE\*00 scale — identical to pre-change behavior

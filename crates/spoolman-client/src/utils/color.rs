@@ -1,4 +1,5 @@
 use deltae::{DEMethod::DE2000, DeltaE, LabValue};
+use oklab::{LinearRgb, Oklab};
 use spoolman_types::models::Rgba;
 
 // ── Algorithm selector ──────────────────────────────────────────────────────
@@ -78,8 +79,16 @@ fn ciede2000_distance(a: &Rgba, b: &Rgba) -> f32 {
 // ── OKLab ───────────────────────────────────────────────────────────────────
 
 fn oklab_distance(a: &Rgba, b: &Rgba) -> f32 {
-    let ok_a = oklab::srgb_to_oklab(oklab::Rgb { r: a.r, g: a.g, b: a.b });
-    let ok_b = oklab::srgb_to_oklab(oklab::Rgb { r: b.r, g: b.g, b: b.b });
+    let ok_a = Oklab::from_linear_rgb(LinearRgb {
+        r: srgb_channel_to_linear(a.r),
+        g: srgb_channel_to_linear(a.g),
+        b: srgb_channel_to_linear(a.b),
+    });
+    let ok_b = Oklab::from_linear_rgb(LinearRgb {
+        r: srgb_channel_to_linear(b.r),
+        g: srgb_channel_to_linear(b.g),
+        b: srgb_channel_to_linear(b.b),
+    });
     let dl = ok_a.l - ok_b.l;
     let da = ok_a.a - ok_b.a;
     let db = ok_a.b - ok_b.b;

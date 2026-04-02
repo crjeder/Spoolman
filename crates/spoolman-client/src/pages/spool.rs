@@ -107,7 +107,7 @@ pub fn SpoolList() -> impl IntoView {
                     s.spool
                         .colors
                         .iter()
-                        .map(|c| color_distance(c, &target))
+                        .map(|c| color_distance(c, &target, cda.0.get()))
                         .fold(f32::MAX, f32::min)
                 };
                 items.sort_by(|a, b| {

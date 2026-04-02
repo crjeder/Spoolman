@@ -38,4 +38,4 @@
 
 - [x] 7.1 Run `cargo clippy -p spoolman-client` and fix any warnings (especially enum exhaustiveness)
 - [x] 7.2 Run `cargo check -p spoolman-server -p spoolman-types` to confirm no unintended cross-crate breakage
-- [ ] 7.3 Manual smoke test: change algorithm in Settings, verify color filter produces visibly different groupings for the same spool list
+- [x] 7.3 Manual smoke test: change algorithm in Settings, verify color filter produces visibly different groupings for the same spool list
