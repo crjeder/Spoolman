@@ -341,7 +341,6 @@ pub fn SpoolList() -> impl IntoView {
                             let material = sr.filament.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
-                                    <td class="num"><a href=format!("/spools/{id}")>{id}</a></td>
                                     <td><a href=format!("/filaments/{filament_id}")>{name}</a></td>
                                     <td>{material}</td>
                                     <td>
