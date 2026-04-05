@@ -249,7 +249,6 @@ pub fn SpoolList() -> impl IntoView {
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th class="material-head">
                                 {move || if !material_filter.get().is_empty() {
