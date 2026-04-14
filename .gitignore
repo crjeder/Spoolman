@@ -214,8 +214,15 @@ data/
 # Git worktrees
 .worktrees/
 
-# Playwright CLI session artifacts
+# Playwright CLI/MCP session artifacts
 .playwright-cli/
+.playwright-mcp/
+
+# Test run metadata
+test-results/
+
+# Release archives
+*.tar.gz
 
 # Test screenshots
 *.png
