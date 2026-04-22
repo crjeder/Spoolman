@@ -281,26 +281,9 @@ impl JsonStore {
 
     pub fn delete_filament(&self, id: u32) -> Result<()> {
         let mut store = self.inner.write().unwrap();
-        // Referential integrity check
-        let referencing: Vec<u32> = store
-            .spools
-            .iter()
-            .filter(|s| s.filament_id == id)
-            .map(|s| s.id)
-            .collect();
-        if !referencing.is_empty() {
-            return Err(StoreError::Conflict(format!(
-                "filament is referenced by spools: {:?}",
-                referencing
-            )));
-        }
-        let before = store.filaments.len();
-        store.filaments.retain(|f| f.id != id);
-        if store.filaments.len() == before {
-            return Err(StoreError::NotFound);
-        }
-        self.flush(&store)?;
-        Ok(())
+        check_no_referencing_spools(&store.spools, "filament", |s| s.filament_id == id)?;
+        retain_or_not_found(&mut store.filaments, |f| f.id != id)?;
+        self.flush(&store)
     }
 
     // ── Spool ──────────────────────────────────────────────────────────────────
@@ -575,25 +558,9 @@ impl JsonStore {
 
     pub fn delete_location(&self, id: u32) -> Result<()> {
         let mut store = self.inner.write().unwrap();
-        let referencing: Vec<u32> = store
-            .spools
-            .iter()
-            .filter(|s| s.location_id == Some(id))
-            .map(|s| s.id)
-            .collect();
-        if !referencing.is_empty() {
-            return Err(StoreError::Conflict(format!(
-                "location is referenced by spools: {:?}",
-                referencing
-            )));
-        }
-        let before = store.locations.len();
-        store.locations.retain(|l| l.id != id);
-        if store.locations.len() == before {
-            return Err(StoreError::NotFound);
-        }
-        self.flush(&store)?;
-        Ok(())
+        check_no_referencing_spools(&store.spools, "location", |s| s.location_id == Some(id))?;
+        retain_or_not_found(&mut store.locations, |l| l.id != id)?;
+        self.flush(&store)
     }
 
     // ── Helpers ────────────────────────────────────────────────────────────────
@@ -651,6 +618,35 @@ impl JsonStore {
 }
 
 // ── Sort / paginate helpers ────────────────────────────────────────────────────
+
+fn check_no_referencing_spools(
+    spools: &[Spool],
+    entity: &str,
+    predicate: impl Fn(&Spool) -> bool,
+) -> Result<()> {
+    let refs: Vec<u32> = spools
+        .iter()
+        .filter(|s| predicate(s))
+        .map(|s| s.id)
+        .collect();
+    if refs.is_empty() {
+        Ok(())
+    } else {
+        Err(StoreError::Conflict(format!(
+            "{entity} is referenced by spools: {refs:?}"
+        )))
+    }
+}
+
+fn retain_or_not_found<T>(items: &mut Vec<T>, predicate: impl Fn(&T) -> bool) -> Result<()> {
+    let before = items.len();
+    items.retain(|x| predicate(x));
+    if items.len() == before {
+        Err(StoreError::NotFound)
+    } else {
+        Ok(())
+    }
+}
 
 fn sort_items<T, F>(items: &mut [T], sort: Option<&str>, order: Option<&str>, key_fn: F)
 where
