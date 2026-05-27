@@ -1,5 +1,5 @@
 use chrono::Utc;
-use rand::Rng;
+use rand::RngExt;
 use spoolman_types::{
     models::{DataStore, Filament, Location, Spool},
     requests::{
