@@ -7,7 +7,10 @@ use leptos::task::spawn_local;
 /// Displays a text input; as the user types, results are filtered client-side
 /// and shown as a clickable list (up to 10). Selecting an entry calls `on_select`.
 #[component]
-pub fn SpoolmanDbSearch(on_select: Callback<SpoolmanEntry>) -> impl IntoView {
+pub fn SpoolmanDbSearch(
+    on_select: Callback<SpoolmanEntry>,
+    #[prop(optional)] on_search_state: Option<Callback<(String, bool)>>,
+) -> impl IntoView {
     // Async load state: None = loading, Some(Err) = unavailable, Some(Ok) = ready.
     let db: RwSignal<Option<Result<Vec<SpoolmanEntry>, String>>> = RwSignal::new(None);
     let query = RwSignal::new(String::new());
@@ -40,6 +43,15 @@ pub fn SpoolmanDbSearch(on_select: Callback<SpoolmanEntry>) -> impl IntoView {
             _ => vec![],
         }
     };
+
+    // Notify parent of query + has-results state whenever either changes.
+    if let Some(cb) = on_search_state {
+        Effect::new(move |_| {
+            let q = query.get();
+            let has_results = !results().is_empty();
+            cb.run((q, has_results));
+        });
+    }
 
     view! {
         <div class="spoolmandb-search">

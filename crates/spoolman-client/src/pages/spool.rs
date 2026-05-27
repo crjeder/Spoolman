@@ -608,6 +608,20 @@ pub fn SpoolCreate() -> impl IntoView {
     let filaments_list: RwSignal<Vec<spoolman_types::models::Filament>> = RwSignal::new(vec![]);
     // Notification shown when a filament is auto-created by the DB lookup.
     let auto_create_msg: RwSignal<Option<String>> = RwSignal::new(None);
+    // (query, has_results) from the SpoolmanDB search panel.
+    let search_state: RwSignal<(String, bool)> = RwSignal::new((String::new(), false));
+    // True when the search has a non-empty query that matched nothing — disable filament selector.
+    let filament_disabled = move || {
+        let (q, has) = search_state.get();
+        !q.is_empty() && !has
+    };
+    // Pre-fill color_name from search text when no results found.
+    Effect::new(move |_| {
+        let (q, has) = search_state.get();
+        if !q.is_empty() && !has {
+            color_name.set(q);
+        }
+    });
 
     Effect::new(move |_| {
         if let Some(Ok(fs)) = filaments.get() {
@@ -727,13 +741,17 @@ pub fn SpoolCreate() -> impl IntoView {
                     >"×"</button>
                 </div>
             })}
-            <SpoolmanDbSearch on_select=on_db_select />
+            <SpoolmanDbSearch
+                on_select=on_db_select
+                on_search_state=Callback::new(move |state| search_state.set(state))
+            />
             <form on:submit=on_submit>
                 <label>
                     "Filament"
                     <Suspense fallback=|| view! { <select><option>"Loading…"</option></select> }>
                         <select
                             prop:value=move || filament_id.get().to_string()
+                            disabled=move || filament_disabled()
                             on:change=move |ev| {
                                 filament_id.set(event_target_value(&ev).parse().unwrap_or(0));
                             }
@@ -751,6 +769,11 @@ pub fn SpoolCreate() -> impl IntoView {
                             }}
                         </select>
                     </Suspense>
+                    {move || filament_disabled().then(|| view! {
+                        <p class="field-hint field-hint-warn">
+                            "Not found in database -- filament selection disabled"
+                        </p>
+                    })}
                 </label>
                 <label>
                     "Color"

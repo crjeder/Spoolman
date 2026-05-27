@@ -4,9 +4,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
-*.so
-
 # Distribution / packaging
 .Python
 build/
@@ -238,3 +235,5 @@ tests/e2e/dist/
 spoolman.json
 new_spoolman.json
 old_spoolman.json
+# CocoIndex Code (ccc)
+/.cocoindex_code/
