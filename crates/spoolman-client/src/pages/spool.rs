@@ -623,15 +623,32 @@ pub fn SpoolCreate() -> impl IntoView {
     let auto_create_msg: RwSignal<Option<String>> = RwSignal::new(None);
     // (query, has_results) from the SpoolmanDB search panel.
     let search_state: RwSignal<(String, bool)> = RwSignal::new((String::new(), false));
-    // True when the search has a non-empty query that matched nothing — disable filament selector.
+    // Disable the filament selector only when the query matched neither the
+    // SpoolmanDB nor any locally known filament.
     let filament_disabled = move || {
         let (q, has) = search_state.get();
-        !q.is_empty() && !has
+        if q.is_empty() || has {
+            return false;
+        }
+        let ql = q.to_lowercase();
+        !filaments_list
+            .get()
+            .iter()
+            .any(|f| f.display_name().to_lowercase().contains(&ql))
     };
-    // Pre-fill color_name from search text when no results found.
+    // No SpoolmanDB match: pre-fill color_name from the search text and, if a
+    // locally known filament matches the query, select it.
     Effect::new(move |_| {
         let (q, has) = search_state.get();
         if !q.is_empty() && !has {
+            let ql = q.to_lowercase();
+            if let Some(f) = filaments_list
+                .get()
+                .iter()
+                .find(|f| f.display_name().to_lowercase().contains(&ql))
+            {
+                filament_id.set(f.id);
+            }
             color_name.set(q);
         }
     });
@@ -866,6 +883,9 @@ pub fn SpoolEdit() -> impl IntoView {
     let location_id = RwSignal::new(Option::<u32>::None);
     let first_used = RwSignal::new(String::new());
     let last_used = RwSignal::new(String::new());
+    // Track whether the loaded spool had no date, so an untouched "today" default is not persisted.
+    let first_used_was_none = RwSignal::new(false);
+    let last_used_was_none = RwSignal::new(false);
     let comment = RwSignal::new(String::new());
     let error = RwSignal::new(Option::<String>::None);
 
@@ -886,17 +906,20 @@ pub fn SpoolEdit() -> impl IntoView {
             }
             color_name.set(sr.spool.color_name.clone().unwrap_or_default());
             location_id.set(sr.spool.location_id);
+            let today = || Utc::now().format("%Y-%m-%d").to_string();
+            first_used_was_none.set(sr.spool.first_used.is_none());
+            last_used_was_none.set(sr.spool.last_used.is_none());
             first_used.set(
                 sr.spool
                     .first_used
                     .map(|d| d.format("%Y-%m-%d").to_string())
-                    .unwrap_or_default(),
+                    .unwrap_or_else(today),
             );
             last_used.set(
                 sr.spool
                     .last_used
                     .map(|d| d.format("%Y-%m-%d").to_string())
-                    .unwrap_or_default(),
+                    .unwrap_or_else(today),
             );
             comment.set(sr.spool.comment.clone().unwrap_or_default());
         }
@@ -911,6 +934,14 @@ pub fn SpoolEdit() -> impl IntoView {
         let navigate = navigate.clone();
         let id = id();
         spawn_local(async move {
+            // Drop the auto-filled "today" default if the spool had no date and the user left it untouched.
+            let prune_default = |s: String, was_none: bool| -> String {
+                if was_none && s == Utc::now().format("%Y-%m-%d").to_string() {
+                    String::new()
+                } else {
+                    s
+                }
+            };
             let parse_dt = |s: String| -> Option<DateTime<Utc>> {
                 if s.is_empty() {
                     return None;
@@ -934,8 +965,8 @@ pub fn SpoolEdit() -> impl IntoView {
                 ),
                 color_name: Some(color_name.get()),
                 location_id: location_id.get(),
-                first_used: parse_dt(first_used.get()),
-                last_used: parse_dt(last_used.get()),
+                first_used: parse_dt(prune_default(first_used.get(), first_used_was_none.get())),
+                last_used: parse_dt(prune_default(last_used.get(), last_used_was_none.get())),
                 comment: Some(comment.get()),
                 ..Default::default()
             };

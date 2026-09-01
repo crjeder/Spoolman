@@ -57,6 +57,18 @@ pub fn make_app() -> (Router, TempDir) {
     (router, dir)
 }
 
+/// Create a storage location and return its id.
+pub async fn create_location(app: &Router) -> u64 {
+    let (_, body) = request(
+        app,
+        Method::POST,
+        "/api/v1/location",
+        Some(serde_json::json!({ "name": "Test Shelf" })),
+    )
+    .await;
+    body["id"].as_u64().unwrap()
+}
+
 /// Dispatch a single request to the app and return (status, parsed JSON body).
 /// Passes `Accept-Encoding: identity` to avoid compressed responses.
 pub async fn request(

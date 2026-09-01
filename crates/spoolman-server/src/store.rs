@@ -358,12 +358,19 @@ impl JsonStore {
             .find(|f| f.id == req.filament_id)
             .ok_or(StoreError::NotFound)?
             .clone();
+        // A spool must be assigned to an existing storage location.
+        let location_id = req
+            .location_id
+            .ok_or_else(|| StoreError::Validation("location_id is required".into()))?;
+        if !store.locations.iter().any(|l| l.id == location_id) {
+            return Err(StoreError::Validation("location_id does not exist".into()));
+        }
         let existing: HashSet<u32> = store.spools.iter().map(|s| s.id).collect();
         let id = Self::new_id(&existing);
         let spool = Spool {
             id,
             filament_id: req.filament_id,
-            location_id: req.location_id,
+            location_id: Some(location_id),
             colors: req.colors,
             color_name: req.color_name,
             initial_weight: req.initial_weight,
@@ -383,6 +390,11 @@ impl JsonStore {
 
     pub fn update_spool(&self, id: u32, req: UpdateSpool) -> Result<SpoolResponse> {
         let mut store = self.inner.write().unwrap();
+        if let Some(lid) = req.location_id {
+            if !store.locations.iter().any(|l| l.id == lid) {
+                return Err(StoreError::Validation("location_id does not exist".into()));
+            }
+        }
         let spool = store
             .spools
             .iter_mut()

@@ -131,13 +131,14 @@ async fn delete_filament_blocked_by_spool_returns_409() {
     )
     .await;
     let fid = filament["id"].as_u64().unwrap();
+    let lid = common::create_location(&app).await;
 
     // Create a spool that references the filament
     common::request(
         &app,
         Method::POST,
         "/api/v1/spool",
-        Some(json!({ "filament_id": fid, "colors": [], "initial_weight": 1000.0 })),
+        Some(json!({ "filament_id": fid, "colors": [], "initial_weight": 1000.0, "location_id": lid })),
     )
     .await;
 
