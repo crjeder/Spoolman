@@ -19,4 +19,4 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [x] "search filament" only in new filament dialog not in edit — SpoolmanDbSearch added to FilamentEdit in 3e1004c
 - [x] new spool should lookup local filaments, too — DB search miss no longer disables the filament selector when a local filament matches; best local match is auto-selected
 - [ ] date format setting not respected
-- [ ] enforce location
+- [x] enforce location — server rejects spool create without a valid location_id (422); create/update validate the location exists

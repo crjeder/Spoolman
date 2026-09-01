@@ -39,7 +39,7 @@ async fn create_spool_with_seeded_data_returns_201() {
         &app,
         Method::POST,
         "/api/v1/spool",
-        Some(json!({ "filament_id": 1001, "colors": [], "initial_weight": 1000.0 })),
+        Some(json!({ "filament_id": 1001, "colors": [], "initial_weight": 1000.0, "location_id": 3001 })),
     )
     .await;
     assert_eq!(status, StatusCode::CREATED, "body: {body}");

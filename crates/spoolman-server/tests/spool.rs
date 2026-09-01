@@ -14,17 +14,18 @@ async fn create_filament(app: &axum::Router) -> u64 {
     body["id"].as_u64().unwrap()
 }
 
-fn spool_body(filament_id: u64) -> serde_json::Value {
-    json!({ "filament_id": filament_id, "colors": [], "initial_weight": 1000.0 })
+fn spool_body(filament_id: u64, location_id: u64) -> serde_json::Value {
+    json!({ "filament_id": filament_id, "colors": [], "initial_weight": 1000.0, "location_id": location_id })
 }
 
 #[tokio::test]
 async fn create_spool_returns_201_with_nested_filament() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
+    let lid = common::create_location(&app).await;
 
     let (status, body) =
-        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
     assert_eq!(status, StatusCode::CREATED);
     assert!(body["id"].as_u64().unwrap() > 0);
     assert_eq!(body["filament_id"].as_u64().unwrap(), fid);
@@ -38,18 +39,42 @@ async fn create_spool_with_unknown_filament_returns_404() {
         &app,
         Method::POST,
         "/api/v1/spool",
-        Some(spool_body(999999)),
+        Some(spool_body(999999, 0)),
     )
     .await;
     assert_eq!(status, StatusCode::NOT_FOUND);
 }
 
 #[tokio::test]
+async fn create_spool_without_location_returns_422() {
+    let (app, _dir) = common::make_app();
+    let fid = create_filament(&app).await;
+    let (status, _) = common::request(
+        &app,
+        Method::POST,
+        "/api/v1/spool",
+        Some(json!({ "filament_id": fid, "colors": [], "initial_weight": 1000.0 })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+}
+
+#[tokio::test]
+async fn create_spool_with_unknown_location_returns_422() {
+    let (app, _dir) = common::make_app();
+    let fid = create_filament(&app).await;
+    let (status, _) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, 999999))).await;
+    assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+}
+
+#[tokio::test]
 async fn get_spool_returns_200() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
+    let lid = common::create_location(&app).await;
     let (_, created) =
-        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
     let sid = created["id"].as_u64().unwrap();
 
     let (status, body) =
@@ -69,8 +94,9 @@ async fn get_unknown_spool_returns_404() {
 async fn list_spools_returns_all() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
-    common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
-    common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+    let lid = common::create_location(&app).await;
+    common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
+    common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
 
     let (status, body) = common::request(&app, Method::GET, "/api/v1/spool", None).await;
     assert_eq!(status, StatusCode::OK);
@@ -81,8 +107,9 @@ async fn list_spools_returns_all() {
 async fn update_spool_weight_sets_last_used() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
+    let lid = common::create_location(&app).await;
     let (_, created) =
-        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
     let sid = created["id"].as_u64().unwrap();
 
     let (status, body) = common::request(
@@ -101,8 +128,9 @@ async fn update_spool_weight_sets_last_used() {
 async fn clone_spool_returns_201_with_different_id() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
+    let lid = common::create_location(&app).await;
     let (_, created) =
-        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
     let sid = created["id"].as_u64().unwrap();
 
     let (status, body) = common::request(
@@ -131,9 +159,10 @@ async fn create_spool_with_zero_net_weight_filament_returns_201() {
     )
     .await;
     let fid = fil["id"].as_u64().unwrap();
+    let lid = common::create_location(&app).await;
 
     let (status, body) =
-        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
     assert_eq!(status, StatusCode::CREATED, "body: {body}");
     assert!(
         body["remaining_pct"].is_null(),
@@ -155,13 +184,14 @@ async fn spool_price_returns_price_per_kg() {
     )
     .await;
     let fid = fil["id"].as_u64().unwrap();
+    let lid = common::create_location(&app).await;
 
     // Spool with price=20.0 and net_weight=1000.0 g → price_per_kg = 20.0
     let (status, body) = common::request(
         &app,
         Method::POST,
         "/api/v1/spool",
-        Some(json!({ "filament_id": fid, "colors": [], "initial_weight": 1200.0, "net_weight": 1000.0, "price": 20.0 })),
+        Some(json!({ "filament_id": fid, "colors": [], "initial_weight": 1200.0, "net_weight": 1000.0, "price": 20.0, "location_id": lid })),
     )
     .await;
     assert_eq!(status, StatusCode::CREATED, "body: {body}");
@@ -173,7 +203,7 @@ async fn spool_price_returns_price_per_kg() {
         &app,
         Method::POST,
         "/api/v1/spool",
-        Some(json!({ "filament_id": fid, "colors": [], "initial_weight": 1200.0, "net_weight": 1000.0 })),
+        Some(json!({ "filament_id": fid, "colors": [], "initial_weight": 1200.0, "net_weight": 1000.0, "location_id": lid })),
     )
     .await;
     assert_eq!(status2, StatusCode::CREATED, "body: {body2}");
@@ -184,8 +214,9 @@ async fn spool_price_returns_price_per_kg() {
 async fn delete_spool_returns_204_and_subsequent_get_404() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
+    let lid = common::create_location(&app).await;
     let (_, created) =
-        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
     let sid = created["id"].as_u64().unwrap();
 
     let (status, _) =

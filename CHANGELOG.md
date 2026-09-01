@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Spool creation now requires a valid `location_id`: the API rejects a spool with no location, or a location that does not exist, with HTTP 422. Spool updates that set `location_id` are validated against existing locations.
 - Filament edit page heading now reads "Edit <manufacturer material>" instead of a generic "Edit Filament".
 - Spool list: clicking the filament name in the first column now opens the spool detail page instead of the filament detail page.
 - Filament detail page heading is prefixed with "Filament:" so it is distinguishable from a spool detail page at a glance.
