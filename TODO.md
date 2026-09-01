@@ -17,6 +17,6 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [x] drop down fields in edit spool / filament do not show the current value
 - [x] edit filament dialog: should be Edit <current filament> not "Filament"
 - [x] "search filament" only in new filament dialog not in edit — SpoolmanDbSearch added to FilamentEdit in 3e1004c
-- [ ] new spool should lookup local filaments, too
+- [x] new spool should lookup local filaments, too — DB search miss no longer disables the filament selector when a local filament matches; best local match is auto-selected
 - [ ] date format setting not respected
 - [ ] enforce location

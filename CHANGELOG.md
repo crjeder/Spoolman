@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Spool edit form now shows today's date in empty `First used` / `Last used` pickers instead of leaving them blank. An untouched default is not saved, so the fields stay unset unless the user picks a date.
+- New spool form: a SpoolmanDB search that returns no match no longer disables the filament selector when the query matches a filament you already have. The matching local filament is selected automatically.
 
 ### Changed
 

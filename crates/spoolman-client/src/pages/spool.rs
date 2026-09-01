@@ -623,15 +623,32 @@ pub fn SpoolCreate() -> impl IntoView {
     let auto_create_msg: RwSignal<Option<String>> = RwSignal::new(None);
     // (query, has_results) from the SpoolmanDB search panel.
     let search_state: RwSignal<(String, bool)> = RwSignal::new((String::new(), false));
-    // True when the search has a non-empty query that matched nothing — disable filament selector.
+    // Disable the filament selector only when the query matched neither the
+    // SpoolmanDB nor any locally known filament.
     let filament_disabled = move || {
         let (q, has) = search_state.get();
-        !q.is_empty() && !has
+        if q.is_empty() || has {
+            return false;
+        }
+        let ql = q.to_lowercase();
+        !filaments_list
+            .get()
+            .iter()
+            .any(|f| f.display_name().to_lowercase().contains(&ql))
     };
-    // Pre-fill color_name from search text when no results found.
+    // No SpoolmanDB match: pre-fill color_name from the search text and, if a
+    // locally known filament matches the query, select it.
     Effect::new(move |_| {
         let (q, has) = search_state.get();
         if !q.is_empty() && !has {
+            let ql = q.to_lowercase();
+            if let Some(f) = filaments_list
+                .get()
+                .iter()
+                .find(|f| f.display_name().to_lowercase().contains(&ql))
+            {
+                filament_id.set(f.id);
+            }
             color_name.set(q);
         }
     });
