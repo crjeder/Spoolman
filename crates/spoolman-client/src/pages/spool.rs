@@ -991,17 +991,16 @@ pub fn SpoolEdit() -> impl IntoView {
                 <label>
                     "Location"
                     <Suspense fallback=|| view! { <select /> }>
-                        <select on:change=move |ev| {
-                            location_id.set(event_target_value(&ev).parse::<u32>().ok());
-                        }>
+                        <select
+                            prop:value=move || location_id.get().map(|id| id.to_string()).unwrap_or_default()
+                            on:change=move |ev| {
+                                location_id.set(event_target_value(&ev).parse::<u32>().ok());
+                            }
+                        >
                             <option value="">"— none —"</option>
                             {move || locations.get().and_then(|r| r.ok()).map(|ls| {
-                                let cur = location_id.get();
                                 ls.into_iter().map(|l| view! {
-                                    <option
-                                        value=l.location.id.to_string()
-                                        selected=cur == Some(l.location.id)
-                                    >{l.location.name}</option>
+                                    <option value=l.location.id.to_string()>{l.location.name}</option>
                                 }).collect_view()
                             })}
                         </select>
