@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Spool list text search now also matches storage location name, in addition to filament name, colour name, and material.
 
+### Changed
+
+- Filament edit page heading now reads "Edit <manufacturer material>" instead of a generic "Edit Filament".
+
 ## [1.5.0] - 2026-04-12
 
 ### Added

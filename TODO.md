@@ -15,7 +15,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] click on collumn 1 in spool view should lead to spool details (not filament)
 - [ ] color name on spool?
 - [x] drop down fields in edit spool / filament do not show the current value
-- [ ] edit filament dialog: should be Edit <current filament> not "Filament"
+- [x] edit filament dialog: should be Edit <current filament> not "Filament"
 - [ ] "search filament" only in new filament dialog not in edit
 - [ ] new spool should lookup local filaments, too
 - [ ] date format setting not respected
