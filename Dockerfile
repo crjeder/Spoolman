@@ -16,6 +16,9 @@ RUN rustup target add wasm32-unknown-unknown \
 WORKDIR /build
 COPY . .
 
+# Empty dir copied into the runtime image to establish /data ownership.
+RUN mkdir -p /build/data
+
 # Build the full workspace: spoolman-server binary + spoolman-client WASM.
 RUN cargo leptos build --release
 
@@ -38,6 +41,11 @@ COPY --from=builder --chown=65532:65532 /build/target/release/spoolman-server /s
 
 # Copy the compiled WASM frontend assets served by the binary at runtime.
 COPY --from=builder --chown=65532:65532 /build/target/site /site
+
+# Seed /data owned by the nonroot user so a freshly created volume inherits
+# writable ownership instead of root:root (the default for a VOLUME
+# mountpoint created before USER switches away from root).
+COPY --from=builder --chown=65532:65532 /build/data /data
 
 LABEL org.opencontainers.image.source=https://github.com/Donkie/Spoolman
 LABEL org.opencontainers.image.description="Keep track of your inventory of 3D-printer filament spools."
