@@ -274,7 +274,7 @@ pub fn FilamentShow() -> impl IntoView {
                     }
                     Ok(f) => view! {
                         <div class="page-header">
-                            <h1>{f.display_name()}</h1>
+                            <h1>"Filament: "{f.display_name()}</h1>
                             <div class="page-actions">
                                 <a href=format!("/filaments/{}/edit", f.id) class="btn ">"Edit"</a>
                                 {move || if confirm_delete.get() {

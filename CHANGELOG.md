@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Filament edit page heading now reads "Edit <manufacturer material>" instead of a generic "Edit Filament".
 - Spool list: clicking the filament name in the first column now opens the spool detail page instead of the filament detail page.
+- Filament detail page heading is prefixed with "Filament:" so it is distinguishable from a spool detail page at a glance.
 
 ## [1.5.0] - 2026-04-12
 
