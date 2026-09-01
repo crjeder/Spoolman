@@ -83,6 +83,15 @@ pub fn SpoolList() -> impl IntoView {
         let pick = color_pick.get();
         let level = color_level.get();
         let mat = material_filter.get();
+        let loc_names: Vec<(u32, String)> = locations
+            .get()
+            .and_then(|r| r.ok())
+            .map(|ls| {
+                ls.into_iter()
+                    .map(|lr| (lr.location.id, lr.location.name.to_lowercase()))
+                    .collect()
+            })
+            .unwrap_or_default();
         spools
             .get()
             .and_then(|r| r.ok())
@@ -103,7 +112,12 @@ pub fn SpoolList() -> impl IntoView {
                         .map(|m| m.abbreviation())
                         .unwrap_or("")
                         .to_lowercase()
-                        .contains(&f);
+                        .contains(&f)
+                    || s.spool.location_id.is_some_and(|lid| {
+                        loc_names
+                            .iter()
+                            .any(|(id, name)| *id == lid && name.contains(&f))
+                    });
                 let material_ok = mat.is_empty()
                     || s.filament
                         .material
