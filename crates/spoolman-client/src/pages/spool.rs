@@ -409,7 +409,6 @@ pub fn SpoolList() -> impl IntoView {
                     <tbody>
                         {move || page_items().into_iter().map(|sr| {
                             let id = sr.spool.id;
-                            let filament_id = sr.filament.id;
                             let name = sr.filament.display_name();
                             let colors = if sr.spool.colors.is_empty() {
                                 vec![Rgba { r: 200, g: 200, b: 200, a: 255 }]
@@ -423,7 +422,7 @@ pub fn SpoolList() -> impl IntoView {
                             let material = sr.filament.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
-                                    <td><a href=format!("/filaments/{filament_id}")>{name}</a></td>
+                                    <td><a href=format!("/spools/{id}")>{name}</a></td>
                                     <td>{material}</td>
                                     <td>
                                         {colors.into_iter().map(|c| view! {

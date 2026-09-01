@@ -9,14 +9,14 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] test on mobile
 
 ## Deficits
-- [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, nonroot container user can't write; fixed in Dockerfile, not yet verified against a real Docker build
-- [ ] date selector not allways dafaults to today
-- [ ] detalil view does not show if it's spool or filament
-- [ ] click on collumn 1 in spool view should lead to spool details (not filament)
-- [ ] color name on spool?
+- [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, non-root container user can't write; fixed in Dockerfile, not yet verified against a real Docker build
+- [ ] date selector not always defaults to today
+- [x] detail view does not show if it's spool or filament
+- [x] click on column 1 in spool view should lead to spool details (not filament)
+- [x] color name on spool? — already wired: create/edit form input, list column, detail row, persisted via API
 - [x] drop down fields in edit spool / filament do not show the current value
-- [ ] edit filament dialog: should be Edit <current filament> not "Filament"
-- [ ] "search filament" only in new filament dialog not in edit
+- [x] edit filament dialog: should be Edit <current filament> not "Filament"
+- [x] "search filament" only in new filament dialog not in edit — SpoolmanDbSearch added to FilamentEdit in 3e1004c
 - [ ] new spool should lookup local filaments, too
 - [ ] date format setting not respected
 - [ ] enforce location

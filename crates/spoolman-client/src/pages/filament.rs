@@ -274,7 +274,7 @@ pub fn FilamentShow() -> impl IntoView {
                     }
                     Ok(f) => view! {
                         <div class="page-header">
-                            <h1>{f.display_name()}</h1>
+                            <h1>"Filament: "{f.display_name()}</h1>
                             <div class="page-actions">
                                 <a href=format!("/filaments/{}/edit", f.id) class="btn ">"Edit"</a>
                                 {move || if confirm_delete.get() {
@@ -499,7 +499,10 @@ pub fn FilamentEdit() -> impl IntoView {
 
     view! {
         <div class="page filament-edit">
-            <h1>"Edit Filament"</h1>
+            <h1>{move || match filament.get() {
+                Some(Ok(f)) => format!("Edit {}", f.display_name()),
+                _ => "Edit Filament".to_string(),
+            }}</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
             <SpoolmanDbSearch on_select=on_db_select />
             <form on:submit=on_submit>
