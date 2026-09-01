@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Spool list text search now also matches storage location name, in addition to filament name, colour name, and material.
 
+### Fixed
+
+- Spool edit form now shows today's date in empty `First used` / `Last used` pickers instead of leaving them blank. An untouched default is not saved, so the fields stay unset unless the user picks a date.
+
 ### Changed
 
 - Filament edit page heading now reads "Edit <manufacturer material>" instead of a generic "Edit Filament".
