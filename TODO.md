@@ -9,10 +9,10 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] test on mobile
 
 ## Deficits
-- [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, nonroot container user can't write; fixed in Dockerfile, not yet verified against a real Docker build
-- [ ] date selector not allways dafaults to today
-- [ ] detalil view does not show if it's spool or filament
-- [ ] click on collumn 1 in spool view should lead to spool details (not filament)
+- [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, non-root container user can't write; fixed in Dockerfile, not yet verified against a real Docker build
+- [ ] date selector not always defaults to today
+- [ ] detail view does not show if it's spool or filament
+- [x] click on column 1 in spool view should lead to spool details (not filament)
 - [ ] color name on spool?
 - [x] drop down fields in edit spool / filament do not show the current value
 - [x] edit filament dialog: should be Edit <current filament> not "Filament"
