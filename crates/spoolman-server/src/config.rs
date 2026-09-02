@@ -51,13 +51,8 @@ impl Config {
 
         // FALSE (exact string) disables CORS; anything else is treated as the
         // allowed origin.
-        let cors_origin = env_var("SPOOLMAN_CORS_ORIGIN").and_then(|v| {
-            if v.to_uppercase() == "FALSE" {
-                None
-            } else {
-                Some(v)
-            }
-        });
+        let cors_origin =
+            env_var("SPOOLMAN_CORS_ORIGIN").filter(|v| v.to_uppercase() != "FALSE");
 
         let automatic_backup = env_var("SPOOLMAN_AUTOMATIC_BACKUP")
             .map(|v| v.to_uppercase() != "FALSE")
