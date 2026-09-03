@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-09-03
+
+### Added
+
+- Spool create/edit color picker now has a `#rrggbb` text field next to the swatch for typing or pasting an exact hex value.
+- Spool and filament list filters (text search, material, location, colour level, colour pick, show-archived) now persist for the browser tab session, so they survive opening a detail page or reloading the tab. They reset when the tab is closed.
+- "Clear filters" button on the spool and filament list headers, shown only when a filter is active, resets every filter at once.
+
+### Fixed
+
+- Spool edit form now preselects the spool's current storage location in the Location drop-down instead of showing "— none —".
+
+### Changed
+
+- Removed the black square marker from the spool list "Material" column header when a material filter is active; the drop-down already shows the selected value.
+
 ## [1.6.0] - 2026-09-01
 
 ### Added

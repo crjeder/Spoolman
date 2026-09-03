@@ -10,8 +10,8 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] multi-color option for filaments / spools. search?
 
 ## Defects
-- [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, non-root container user can't write; fixed in Dockerfile, not yet verified against a real Docker build
-- [x] date selector not always defaults to today — empty first_used/last_used pickers show today; untouched default not persisted
+- [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, non-root container user can't write; fixed in Dockerfile, not yet verified against a real Docker build. -> use the username spoolman
+- [x] date selector not always defaults to today — empty first_used/last_used pickers show today; untouched default not persisted 
 - [x] detail view does not show if it's spool or filament
 - [x] click on column 1 in spool view should lead to spool details (not filament)
 - [x] color name on spool? — already wired: create/edit form input, list column, detail row, persisted via API
@@ -19,7 +19,9 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [x] edit filament dialog: should be Edit <current filament> not "Filament"
 - [x] "search filament" only in new filament dialog not in edit — SpoolmanDbSearch added to FilamentEdit in 3e1004c
 - [x] new spool should lookup local filaments, too — DB search miss no longer disables the filament selector when a local filament matches; best local match is auto-selected
-- [ ] date format setting not respected
+- [ ] date format setting not respected — could not reproduce: `date_format` is loaded in `App` into `DateFormat` context and passed to `format::format_date` at every display site (spool/filament list + show). Needs a concrete repro (which view, what setting).
 - [x] enforce location — server rejects spool create without a valid location_id (422); create/update validate the location exists
-- [ ] Location drop-down does not show the current location in edit spool
-- [ ] keep filters active until session end or user deactivates them. add a remove all filters button 
+- [x] Location drop-down does not show the current location in edit spool — `<option>` now gets `selected` per-item (Suspense-rendered options ignored the select's `prop:value`)
+- [~] keep filters active until session end or user deactivates them. add a remove all filters button — implemented (sessionStorage persistence + "Clear filters" button, spool + filament lists); manual/Playwright verification pending. openspec: persist-spool-filters
+- [x] remove the black square in the heading of the Material column after selecting a filter — dropped the `\u{25A0}` marker; the select already shows the active value
+- [x] color picker: add hex code input — `#rrggbb` text field beside the swatch in spool create/edit, synced to the color signal

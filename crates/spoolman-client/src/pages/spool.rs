@@ -22,9 +22,14 @@ use spoolman_types::requests::CreateFilament;
 #[component]
 pub fn SpoolList() -> impl IntoView {
     let ts = use_table_state("spools");
-    let show_archived = RwSignal::new(false);
-    let color_pick = RwSignal::new("#000000".to_string());
-    let color_level = RwSignal::new("off".to_string());
+    // Filters persist for the tab session via sessionStorage (see state::session_get).
+    let sg = |key: &str, default: &str| {
+        crate::state::session_get(&format!("filter.spools.{key}"))
+            .unwrap_or_else(|| default.to_string())
+    };
+    let show_archived = RwSignal::new(sg("show_archived", "false") == "true");
+    let color_pick = RwSignal::new(sg("color_pick", "#000000"));
+    let color_level = RwSignal::new(sg("color_level", "off"));
     let popup_open = RwSignal::new(false);
     let cda = color_distance_algorithm();
     let ct = color_thresholds();
@@ -41,8 +46,33 @@ pub fn SpoolList() -> impl IntoView {
         "registered",
     ]);
 
-    let material_filter = RwSignal::new(String::new());
-    let location_filter: RwSignal<Option<u32>> = RwSignal::new(None);
+    let material_filter = RwSignal::new(sg("material", ""));
+    let location_filter: RwSignal<Option<u32>> =
+        RwSignal::new(sg("location", "").parse::<u32>().ok());
+
+    // Persist each filter back to sessionStorage on change (default value = cleared).
+    Effect::new(move |_| crate::state::session_set("filter.spools.show_archived",
+        if show_archived.get() { "true" } else { "false" }));
+    Effect::new(move |_| crate::state::session_set("filter.spools.color_pick", &color_pick.get()));
+    Effect::new(move |_| crate::state::session_set("filter.spools.color_level", &color_level.get()));
+    Effect::new(move |_| crate::state::session_set("filter.spools.material", &material_filter.get()));
+    Effect::new(move |_| crate::state::session_set("filter.spools.location",
+        &location_filter.get().map(|id| id.to_string()).unwrap_or_default()));
+
+    let filters_active = move || {
+        !ts.filter.get().is_empty()
+            || !material_filter.get().is_empty()
+            || location_filter.get().is_some()
+            || color_level.get() != "off"
+            || show_archived.get()
+    };
+    let clear_filters = move |_| {
+        ts.filter.set(String::new());
+        material_filter.set(String::new());
+        location_filter.set(None);
+        color_level.set("off".to_string());
+        show_archived.set(false);
+    };
 
     let version = RwSignal::new(0u32);
     let confirm_delete: RwSignal<Option<u32>> = RwSignal::new(None);
@@ -277,10 +307,14 @@ pub fn SpoolList() -> impl IntoView {
                     </div>
                     <label>
                         <input type="checkbox"
+                            prop:checked=move || show_archived.get()
                             on:change=move |ev| show_archived.set(event_target_checked(&ev))
                         />
                         " Show archived"
                     </label>
+                    {move || filters_active().then(|| view! {
+                        <button type="button" class="btn" on:click=clear_filters>"Clear filters"</button>
+                    })}
                     <a href="/spools/new" class="btn btn-primary ">"+ New Spool"</a>
                 </div>
             </div>
@@ -290,20 +324,20 @@ pub fn SpoolList() -> impl IntoView {
                         <tr>
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th class="material-head">
-                                {move || if !material_filter.get().is_empty() {
-                                    view! { "Material \u{25A0}" }.into_any()
-                                } else {
-                                    view! { "Material" }.into_any()
-                                }}
+                                "Material"
                                 <select class="material-filter-select"
                                     prop:value=move || material_filter.get()
                                     on:change=move |ev| material_filter.set(event_target_value(&ev))
                                 >
                                     <option value="">"All"</option>
-                                    {move || available_materials.get().into_iter().map(|m| {
-                                        let m2 = m.clone();
-                                        view! { <option value=m>{m2}</option> }
-                                    }).collect_view()}
+                                    {move || {
+                                        let cur = material_filter.get();
+                                        available_materials.get().into_iter().map(|m| {
+                                            let sel = m == cur;
+                                            let m2 = m.clone();
+                                            view! { <option value=m selected=sel>{m2}</option> }
+                                        }).collect_view()
+                                    }}
                                 </select>
                             </th>
                             <th class="color-head">
@@ -811,6 +845,12 @@ pub fn SpoolCreate() -> impl IntoView {
                         <input type="color"
                             prop:value=move || color_hex.get()
                             on:input=move |ev| color_hex.set(event_target_value(&ev)) />
+                        <input type="text" class="color-hex-input" maxlength="7" placeholder="#rrggbb"
+                            prop:value=move || color_hex.get()
+                            on:input=move |ev| {
+                                let v = event_target_value(&ev);
+                                if hex_to_rgba(&v).is_some() { color_hex.set(v); }
+                            } />
                         <input type="range" min="0" max="255" title="Opacity"
                             prop:value=move || color_alpha.get().to_string()
                             on:input=move |ev| color_alpha.set(event_target_value(&ev).parse().unwrap_or(255)) />
@@ -1006,6 +1046,12 @@ pub fn SpoolEdit() -> impl IntoView {
                         <input type="color"
                             prop:value=move || color_hex.get()
                             on:input=move |ev| color_hex.set(event_target_value(&ev)) />
+                        <input type="text" class="color-hex-input" maxlength="7" placeholder="#rrggbb"
+                            prop:value=move || color_hex.get()
+                            on:input=move |ev| {
+                                let v = event_target_value(&ev);
+                                if hex_to_rgba(&v).is_some() { color_hex.set(v); }
+                            } />
                         <input type="range" min="0" max="255" title="Opacity"
                             prop:value=move || color_alpha.get().to_string()
                             on:input=move |ev| color_alpha.set(event_target_value(&ev).parse().unwrap_or(255)) />
@@ -1029,8 +1075,12 @@ pub fn SpoolEdit() -> impl IntoView {
                         >
                             <option value="">"— none —"</option>
                             {move || locations.get().and_then(|r| r.ok()).map(|ls| {
-                                ls.into_iter().map(|l| view! {
-                                    <option value=l.location.id.to_string()>{l.location.name}</option>
+                                let cur = location_id.get();
+                                ls.into_iter().map(|l| {
+                                    let lid = l.location.id;
+                                    view! {
+                                        <option value=lid.to_string() selected=cur == Some(lid)>{l.location.name}</option>
+                                    }
                                 }).collect_view()
                             })}
                         </select>

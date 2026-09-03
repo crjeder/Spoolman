@@ -182,6 +182,11 @@ pub fn FilamentList() -> impl IntoView {
                             >"×"</button>
                         })}
                     </div>
+                    {move || (!ts.filter.get().is_empty()).then(|| view! {
+                        <button type="button" class="btn"
+                            on:click=move |_| ts.filter.set(String::new())
+                        >"Clear filters"</button>
+                    })}
                     <a href="/filaments/new" class="btn btn-primary ">"+ New Filament"</a>
                 </div>
             </div>

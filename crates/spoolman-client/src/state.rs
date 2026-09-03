@@ -136,7 +136,10 @@ pub fn use_table_state(namespace: &'static str) -> TableState {
     let sort_asc = RwSignal::new(load("sort_asc", "false") == "true");
     let page = RwSignal::new(load("page", "0").parse::<usize>().unwrap_or(0));
     let page_size = RwSignal::new(load("page_size", "25").parse::<usize>().unwrap_or(25));
-    let filter = RwSignal::new(String::new()); // filters are session-only
+    // Text filter persists for the tab session (sessionStorage), not across sessions.
+    let filter = RwSignal::new(
+        session_get(&format!("filter.{namespace}.text")).unwrap_or_default(),
+    );
 
     // Persist changes back to localStorage.
     {
@@ -159,6 +162,9 @@ pub fn use_table_state(namespace: &'static str) -> TableState {
                 &page_size.get().to_string(),
             );
         });
+        Effect::new(move |_| {
+            session_set(&format!("filter.{ns}.text"), &filter.get());
+        });
     }
 
     TableState {
@@ -178,6 +184,23 @@ fn storage_get(key: &str) -> Option<String> {
 
 fn storage_set(key: &str, value: &str) {
     if let Some(storage) = window().and_then(|w| w.local_storage().ok().flatten()) {
+        let _ = storage.set_item(key, value);
+    }
+}
+
+/// Read a value from `sessionStorage` — scoped to the browser tab session,
+/// cleared when the tab closes. Returns `None` if the key is absent or storage
+/// is unavailable (private mode, disabled).
+pub fn session_get(key: &str) -> Option<String> {
+    window()
+        .and_then(|w| w.session_storage().ok().flatten())
+        .and_then(|s| s.get_item(key).ok().flatten())
+}
+
+/// Write a value to `sessionStorage`. A no-op if storage is unavailable.
+/// Callers store a filter's default value to represent "cleared".
+pub fn session_set(key: &str, value: &str) {
+    if let Some(storage) = window().and_then(|w| w.session_storage().ok().flatten()) {
         let _ = storage.set_item(key, value);
     }
 }
