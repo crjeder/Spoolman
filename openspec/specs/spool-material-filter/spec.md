@@ -3,9 +3,7 @@
 ## Purpose
 
 Allow users to filter the spool list by filament material via a dropdown embedded in the Material column header.
-
 ## Requirements
-
 ### Requirement: Material column header contains a filter dropdown
 The Material column header SHALL contain a `<select>` dropdown. The dropdown SHALL list "All" as the first option, followed by the distinct material abbreviations present in the full (unfiltered) spool list, sorted alphabetically. Filaments with no material set SHALL NOT appear as a selectable option.
 
@@ -39,3 +37,15 @@ When a material is selected in the dropdown, the spool list SHALL show only spoo
 #### Scenario: Material filter combines with color filter
 - **WHEN** a material filter is active and a color filter is active
 - **THEN** only spools matching both the material filter and the color filter are displayed
+
+### Requirement: Material filter selection persists for the session
+The selected material in the Material column dropdown SHALL be stored in `sessionStorage` and restored when the spool list is re-created or reloaded within the same tab session. The "Clear filters" control SHALL reset the material filter to "All" and remove its stored value.
+
+#### Scenario: Selected material restored after navigation
+- **WHEN** the user selects "PETG" and navigates away from the spool list and back
+- **THEN** the Material dropdown shows "PETG" and only PETG spools are displayed
+
+#### Scenario: Clear filters resets the material dropdown
+- **WHEN** a material filter is active and the user clicks "Clear filters"
+- **THEN** the Material dropdown returns to "All" and spools of every material are displayed
+

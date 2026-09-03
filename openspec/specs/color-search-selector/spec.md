@@ -3,9 +3,7 @@
 ## Purpose
 
 The color filter controls use a named level selector (Off / Fine / Medium / Coarse) instead of a raw numeric threshold slider. The level drives a CIEDE2000 distance threshold for color matching. The color picker is only shown when the level is active.
-
 ## Requirements
-
 ### Requirement: Color search level selector replaces threshold slider
 The color filter controls SHALL include a `<select>` element with four named levels: **Off**, **Fine**, **Medium**, and **Coarse**. The selector SHALL default to **Off**. The raw numeric range slider SHALL be removed.
 
@@ -56,3 +54,15 @@ When the color level selector is set to any value other than Off, the spool list
 #### Scenario: Switching level back to Off deactivates delta sort
 - **WHEN** the user changes the color level selector back to "Off"
 - **THEN** the spool list SHALL immediately revert to column-based sort order
+
+### Requirement: Color level and picked color persist for the session
+The color level selector value and the picked color SHALL be stored in `sessionStorage` and restored when the spool list is re-created or reloaded within the same tab session. When a stored level other than "Off" is restored, the color filter and implicit color-delta sort SHALL apply on first render without user action. The "Clear filters" control SHALL reset the level to "Off" (and, per `color-search-selector`, hide the picker and revert to column sort) and remove the stored values.
+
+#### Scenario: Active color level restored after navigation
+- **WHEN** the user sets the level to "Medium" with a picked color, navigates away and back
+- **THEN** the level selector shows "Medium", the picker shows the stored color, and the list is filtered and delta-sorted accordingly
+
+#### Scenario: Clear filters resets the color level
+- **WHEN** a color level other than "Off" is active and the user clicks "Clear filters"
+- **THEN** the level selector returns to "Off", the picker is hidden, and the list reverts to column-based sort
+
