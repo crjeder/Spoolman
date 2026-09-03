@@ -9,6 +9,7 @@ pub fn HelpPage() -> impl IntoView {
                 <h2>"About Spoolman"</h2>
                 <p>"Spoolman is a self-hosted filament spool tracker. "
                    "It stores spool data in a local JSON file — no external database required."</p>
+                <p>"Version "<code>{env!("CARGO_PKG_VERSION")}</code></p>
             </section>
             <section>
                 <h2>"Tracking weight"</h2>
