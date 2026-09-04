@@ -8,7 +8,7 @@
       "registered": "2025-05-12T13:42:47Z",
       "manufacturer": "JAYO",
       "material": "PLA",
-      "material_modifier": "Sky Blue",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -20,7 +20,7 @@
       "registered": "2025-05-12T13:44:13Z",
       "manufacturer": "JAYO",
       "material": "PLA",
-      "material_modifier": "Cherry Red",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -32,7 +32,7 @@
       "registered": "2025-05-12T13:46:34Z",
       "manufacturer": "OWL-Filament",
       "material": "PLA",
-      "material_modifier": "Proto Braun-Grün",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -44,7 +44,7 @@
       "registered": "2025-05-12T13:48:10Z",
       "manufacturer": "OWL-Filament",
       "material": "PLA",
-      "material_modifier": "Proto Schwarz-Rot",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -56,7 +56,7 @@
       "registered": "2025-05-12T13:49:04Z",
       "manufacturer": "OWL-Filament",
       "material": "PLA",
-      "material_modifier": "Proto Gelb-Orange",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -68,7 +68,7 @@
       "registered": "2025-05-12T14:24:42Z",
       "manufacturer": "Filatech",
       "material": "PLA",
-      "material_modifier": "Luminous green",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -80,7 +80,7 @@
       "registered": "2025-05-12T14:26:10Z",
       "manufacturer": "OWL-Filament",
       "material": "PETG",
-      "material_modifier": "RAL 6029",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 240,
@@ -92,7 +92,7 @@
       "registered": "2025-05-12T14:04:14Z",
       "manufacturer": "noname",
       "material": "PLA",
-      "material_modifier": "Green",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -104,7 +104,7 @@
       "registered": "2025-05-12T14:27:45Z",
       "manufacturer": "noname",
       "material": "PLA",
-      "material_modifier": "Grey",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -116,7 +116,7 @@
       "registered": "2025-05-12T14:40:17Z",
       "manufacturer": "Polaroid",
       "material": "PLA",
-      "material_modifier": "Grey",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -128,7 +128,7 @@
       "registered": "2025-05-12T14:52:06Z",
       "manufacturer": "Bambu Lab",
       "material": "PLA",
-      "material_modifier": "Bambu Basic Green",
+      "material_modifier": null,
       "density": 1.24,
       "diameter": 1.75,
       "print_temp": 220,
@@ -140,7 +140,7 @@
       "registered": "2025-05-12T14:29:05Z",
       "manufacturer": "noname",
       "material": "PLA",
-      "material_modifier": "Grey silk",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -152,7 +152,7 @@
       "registered": "2025-05-12T14:05:29Z",
       "manufacturer": "JAYO",
       "material": "PLA",
-      "material_modifier": "Orange mate",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -164,7 +164,7 @@
       "registered": "2025-05-12T14:36:12Z",
       "manufacturer": "JAYO",
       "material": "PLA",
-      "material_modifier": "silk dual color red-gold",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -176,7 +176,7 @@
       "registered": "2025-05-12T14:51:18Z",
       "manufacturer": "Extrudr",
       "material": "PLA",
-      "material_modifier": "Steampunk Copper",
+      "material_modifier": null,
       "density": 1.25,
       "diameter": 1.75,
       "print_temp": 230,
@@ -188,7 +188,7 @@
       "registered": "2025-05-12T14:50:35Z",
       "manufacturer": "Extrudr",
       "material": "PLA",
-      "material_modifier": "Venom Green",
+      "material_modifier": null,
       "density": 1.25,
       "diameter": 1.75,
       "print_temp": 230,
@@ -200,7 +200,7 @@
       "registered": "2025-05-12T15:03:45Z",
       "manufacturer": "Filatech",
       "material": "PLA",
-      "material_modifier": "Luminous Yellow",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -212,7 +212,7 @@
       "registered": "2025-05-12T14:30:11Z",
       "manufacturer": "noname",
       "material": "PETG",
-      "material_modifier": "Neon Orange",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 24,
@@ -224,7 +224,7 @@
       "registered": "2025-05-12T14:31:21Z",
       "manufacturer": "noname",
       "material": "PETG",
-      "material_modifier": "Blue",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 240,
@@ -236,7 +236,7 @@
       "registered": "2025-05-12T15:02:03Z",
       "manufacturer": "Eryone",
       "material": "PETG",
-      "material_modifier": "Grey Carbon Fiber",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 250,
@@ -248,7 +248,7 @@
       "registered": "2025-05-12T14:57:41Z",
       "manufacturer": "meltbro",
       "material": "PETG",
-      "material_modifier": "Eisengrau",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 250,
@@ -260,7 +260,7 @@
       "registered": "2025-05-12T14:44:42Z",
       "manufacturer": "Overture",
       "material": "PETG",
-      "material_modifier": "Transparent",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 240,
@@ -272,7 +272,7 @@
       "registered": "2025-05-12T14:33:02Z",
       "manufacturer": "OWL-Filament",
       "material": "PETG",
-      "material_modifier": "Neon-Blau",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 240,
@@ -284,7 +284,7 @@
       "registered": "2025-05-12T13:53:16Z",
       "manufacturer": "Creality",
       "material": "PLA",
-      "material_modifier": "Black",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -296,7 +296,7 @@
       "registered": "2025-05-12T14:43:22Z",
       "manufacturer": "Verbatim",
       "material": "ABS",
-      "material_modifier": "Grey",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 250,
@@ -308,7 +308,7 @@
       "registered": "2025-05-12T14:34:27Z",
       "manufacturer": "OWL-Filament",
       "material": "PETG",
-      "material_modifier": "Neon Gelb RAL 1026",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 240,
@@ -320,7 +320,7 @@
       "registered": "2025-05-12T14:38:29Z",
       "manufacturer": "Tecbears",
       "material": "PETG",
-      "material_modifier": "Black",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 240,
@@ -332,7 +332,7 @@
       "registered": "2025-05-12T14:58:52Z",
       "manufacturer": "meltbro",
       "material": "ASA",
-      "material_modifier": "Weiß",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": null,
@@ -344,7 +344,7 @@
       "registered": "2025-05-12T14:41:27Z",
       "manufacturer": "JAYO",
       "material": "PLA",
-      "material_modifier": "Glow in the dark – blue",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -356,7 +356,7 @@
       "registered": "2025-05-12T15:08:20Z",
       "manufacturer": "Vellman",
       "material": "PLA",
-      "material_modifier": "Bronze",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -368,7 +368,7 @@
       "registered": "2025-05-12T14:46:19Z",
       "manufacturer": "OWL-Filament",
       "material": "TPU",
-      "material_modifier": "Weiß",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": null,
@@ -380,7 +380,7 @@
       "registered": "2025-05-12T13:59:35Z",
       "manufacturer": "JAYO",
       "material": "PLA",
-      "material_modifier": "High-speed PLA white",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -392,7 +392,7 @@
       "registered": "2025-05-12T14:06:40Z",
       "manufacturer": "GEEETECH",
       "material": "PLA",
-      "material_modifier": "Silk gold",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -404,7 +404,7 @@
       "registered": "2025-05-12T14:08:01Z",
       "manufacturer": "GEEETECH",
       "material": "PLA",
-      "material_modifier": "Silk Silver",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.78,
       "print_temp": 220,
@@ -416,7 +416,7 @@
       "registered": "2025-05-12T14:49:54Z",
       "manufacturer": "Extrudr",
       "material": "PLA",
-      "material_modifier": "Inca Gold",
+      "material_modifier": null,
       "density": 1.25,
       "diameter": 1.75,
       "print_temp": 230,
@@ -428,7 +428,7 @@
       "registered": "2025-05-12T15:05:05Z",
       "manufacturer": "Extrudr",
       "material": "TPU",
-      "material_modifier": "FLEX - Black - Semisoft",
+      "material_modifier": null,
       "density": 1.18,
       "diameter": 1.75,
       "print_temp": 250,
@@ -440,7 +440,7 @@
       "registered": "2025-05-12T14:56:01Z",
       "manufacturer": "Extrudr",
       "material": "TPU",
-      "material_modifier": "FLEX - Anthracite - Medium",
+      "material_modifier": null,
       "density": 1.2,
       "diameter": 1.75,
       "print_temp": 250,
@@ -452,7 +452,7 @@
       "registered": "2025-05-12T13:54:32Z",
       "manufacturer": "GEEETECH",
       "material": "PLA",
-      "material_modifier": "Mate black",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -464,7 +464,7 @@
       "registered": "2025-05-12T13:57:45Z",
       "manufacturer": "GEEETECH",
       "material": "PLA",
-      "material_modifier": "Bone White",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -476,7 +476,7 @@
       "registered": "2025-05-12T14:17:40Z",
       "manufacturer": "GEEETECH",
       "material": "PLA",
-      "material_modifier": "HS-PLA black",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -488,7 +488,7 @@
       "registered": "2025-05-20T19:35:41Z",
       "manufacturer": "noname",
       "material": "PLA",
-      "material_modifier": "BW Grün",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": null,
@@ -500,7 +500,7 @@
       "registered": "2025-05-20T19:37:56Z",
       "manufacturer": "noname",
       "material": "PLA",
-      "material_modifier": "Silber Matt",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": null,
@@ -512,7 +512,7 @@
       "registered": "2025-05-20T19:40:30Z",
       "manufacturer": "noname",
       "material": "PLA",
-      "material_modifier": "Hellgrau",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.74,
       "print_temp": null,
@@ -524,7 +524,7 @@
       "registered": "2025-05-20T19:42:56Z",
       "manufacturer": "noname",
       "material": "PLA",
-      "material_modifier": "Sonnengelb",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": null,
@@ -536,7 +536,7 @@
       "registered": "2025-05-12T14:48:51Z",
       "manufacturer": "GEEETECH",
       "material": "TPU",
-      "material_modifier": "95A Black",
+      "material_modifier": null,
       "density": 1.75,
       "diameter": 1.75,
       "print_temp": null,
@@ -548,7 +548,7 @@
       "registered": "2025-05-12T14:47:31Z",
       "manufacturer": "Creality",
       "material": "PLA",
-      "material_modifier": "White",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -560,7 +560,7 @@
       "registered": "2025-06-03T19:36:23Z",
       "manufacturer": "ELEGOO",
       "material": "PLA",
-      "material_modifier": "Galaxy Black",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": null,
@@ -572,7 +572,7 @@
       "registered": "2025-06-03T19:38:15Z",
       "manufacturer": "ELEGOO",
       "material": "PLA",
-      "material_modifier": "Marmor",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": null,
@@ -584,7 +584,7 @@
       "registered": "2025-06-03T19:40:09Z",
       "manufacturer": "ELEGOO",
       "material": "ASA",
-      "material_modifier": "Black",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": null,
@@ -596,7 +596,7 @@
       "registered": "2026-03-26T10:09:37Z",
       "manufacturer": "Sunlu",
       "material": "PLA+",
-      "material_modifier": "Cherry Red",
+      "material_modifier": null,
       "density": 1.24,
       "diameter": 1.75,
       "print_temp": 210,
@@ -608,7 +608,7 @@
       "registered": "2025-05-12T14:09:55Z",
       "manufacturer": "YourDroid",
       "material": "PLA",
-      "material_modifier": "White",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -620,7 +620,7 @@
       "registered": "2025-05-12T14:11:54Z",
       "manufacturer": "OWL-Filament",
       "material": "PETG",
-      "material_modifier": "Grün",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 240,
@@ -632,7 +632,7 @@
       "registered": "2025-05-12T14:14:48Z",
       "manufacturer": "OWL-Filament",
       "material": "PETG",
-      "material_modifier": "Beige",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 240,
@@ -644,7 +644,7 @@
       "registered": "2025-05-12T15:06:15Z",
       "manufacturer": "Hobbyking",
       "material": "PETG",
-      "material_modifier": "Green transparent",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 250,
@@ -656,7 +656,7 @@
       "registered": "2025-05-12T14:16:27Z",
       "manufacturer": "OWL-Filament",
       "material": "PETG",
-      "material_modifier": "Neon Gelb RAL 1026",
+      "material_modifier": null,
       "density": 1.27,
       "diameter": 1.75,
       "print_temp": 240,
@@ -668,7 +668,7 @@
       "registered": "2025-05-27T19:32:18Z",
       "manufacturer": "JAYO",
       "material": "PLA",
-      "material_modifier": "Cherry Red",
+      "material_modifier": null,
       "density": 1.23,
       "diameter": 1.75,
       "print_temp": 220,
@@ -692,7 +692,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Sky Blue",
       "initial_weight": 1243.0,
       "current_weight": 697.0,
       "net_weight": 1100.0,
@@ -715,7 +715,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Sky Blue",
       "initial_weight": 1243.0,
       "current_weight": 1243.0,
       "net_weight": 1100.0,
@@ -738,7 +738,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Cherry Red",
       "initial_weight": 1243.0,
       "current_weight": 707.0,
       "net_weight": 1100.0,
@@ -761,7 +761,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Cherry Red",
       "initial_weight": 1243.0,
       "current_weight": 1243.0,
       "net_weight": 1100.0,
@@ -784,7 +784,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Proto Braun-Grün",
       "initial_weight": 1150.0,
       "current_weight": 200.0,
       "net_weight": 1000.0,
@@ -807,7 +807,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Proto Schwarz-Rot",
       "initial_weight": 1220.0,
       "current_weight": 1150.0,
       "net_weight": 1000.0,
@@ -830,7 +830,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Proto Gelb-Orange",
       "initial_weight": 1220.0,
       "current_weight": 1124.0,
       "net_weight": 1000.0,
@@ -853,7 +853,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Luminous green",
       "initial_weight": 1220.0,
       "current_weight": 1015.0,
       "net_weight": 1000.0,
@@ -876,7 +876,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "RAL 6029",
       "initial_weight": 1220.0,
       "current_weight": 1087.0,
       "net_weight": 1000.0,
@@ -899,7 +899,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Green",
       "initial_weight": 450.0,
       "current_weight": 266.0,
       "net_weight": 250.0,
@@ -922,7 +922,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Grey",
       "initial_weight": 1220.0,
       "current_weight": 1111.0,
       "net_weight": 1000.0,
@@ -945,7 +945,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Grey",
       "initial_weight": 1220.0,
       "current_weight": 400.0,
       "net_weight": 1000.0,
@@ -968,7 +968,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Bambu Basic Green",
       "initial_weight": 1250.0,
       "current_weight": 1250.0,
       "net_weight": 1000.0,
@@ -991,7 +991,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Grey silk",
       "initial_weight": 1103.0,
       "current_weight": 1103.0,
       "net_weight": 1000.0,
@@ -1014,7 +1014,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Orange mate",
       "initial_weight": 1222.0,
       "current_weight": 1177.0,
       "net_weight": 1100.0,
@@ -1030,7 +1030,7 @@
       "filament_id": 927833038,
       "location_id": 1148069750,
       "colors": [],
-      "color_name": null,
+      "color_name": "silk dual color red-gold",
       "initial_weight": 1168.0,
       "current_weight": 1070.0,
       "net_weight": 1100.0,
@@ -1053,7 +1053,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Steampunk Copper",
       "initial_weight": 1060.0,
       "current_weight": 957.0,
       "net_weight": 800.0,
@@ -1076,7 +1076,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Venom Green",
       "initial_weight": 1060.0,
       "current_weight": 800.0,
       "net_weight": 800.0,
@@ -1099,7 +1099,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Luminous Yellow",
       "initial_weight": 1220.0,
       "current_weight": 1220.0,
       "net_weight": 1000.0,
@@ -1122,7 +1122,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Neon Orange",
       "initial_weight": 1200.0,
       "current_weight": 1200.0,
       "net_weight": 1000.0,
@@ -1145,7 +1145,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Blue",
       "initial_weight": 1200.0,
       "current_weight": 1200.0,
       "net_weight": 1000.0,
@@ -1168,7 +1168,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Grey Carbon Fiber",
       "initial_weight": 1220.0,
       "current_weight": 1220.0,
       "net_weight": 1000.0,
@@ -1191,7 +1191,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Eisengrau",
       "initial_weight": 1220.0,
       "current_weight": 1220.0,
       "net_weight": 1000.0,
@@ -1214,7 +1214,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Transparent",
       "initial_weight": 1165.0,
       "current_weight": 918.0,
       "net_weight": 1000.0,
@@ -1237,7 +1237,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Neon-Blau",
       "initial_weight": 1220.0,
       "current_weight": 1220.0,
       "net_weight": 1000.0,
@@ -1253,7 +1253,7 @@
       "filament_id": 4290424114,
       "location_id": 4171955169,
       "colors": [],
-      "color_name": null,
+      "color_name": "Black",
       "initial_weight": 1220.0,
       "current_weight": 328.0,
       "net_weight": 1000.0,
@@ -1276,7 +1276,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Grey",
       "initial_weight": 1250.0,
       "current_weight": 1250.0,
       "net_weight": 1000.0,
@@ -1299,7 +1299,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Neon Gelb RAL 1026",
       "initial_weight": 1157.0,
       "current_weight": 1157.0,
       "net_weight": 1000.0,
@@ -1322,7 +1322,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Black",
       "initial_weight": 1220.0,
       "current_weight": 246.0,
       "net_weight": 1000.0,
@@ -1345,7 +1345,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Weiß",
       "initial_weight": 1133.0,
       "current_weight": 1012.0,
       "net_weight": 1000.0,
@@ -1368,7 +1368,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Glow in the dark – blue",
       "initial_weight": 1240.0,
       "current_weight": 1200.0,
       "net_weight": 1100.0,
@@ -1391,7 +1391,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Bronze",
       "initial_weight": 970.0,
       "current_weight": 970.0,
       "net_weight": 750.0,
@@ -1414,7 +1414,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Weiß",
       "initial_weight": 1220.0,
       "current_weight": 1200.0,
       "net_weight": 1000.0,
@@ -1437,7 +1437,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "High-speed PLA white",
       "initial_weight": 1200.0,
       "current_weight": 800.0,
       "net_weight": 1100.0,
@@ -1460,7 +1460,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Silk gold",
       "initial_weight": 630.0,
       "current_weight": 630.0,
       "net_weight": 500.0,
@@ -1483,7 +1483,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Silk Silver",
       "initial_weight": 630.0,
       "current_weight": 630.0,
       "net_weight": 500.0,
@@ -1506,7 +1506,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Inca Gold",
       "initial_weight": 1060.0,
       "current_weight": 1020.0,
       "net_weight": 800.0,
@@ -1529,7 +1529,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "FLEX - Black - Semisoft",
       "initial_weight": 1010.0,
       "current_weight": 991.0,
       "net_weight": 750.0,
@@ -1552,7 +1552,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "FLEX - Anthracite - Medium",
       "initial_weight": 1010.0,
       "current_weight": 871.0,
       "net_weight": 750.0,
@@ -1575,7 +1575,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Mate black",
       "initial_weight": 1158.0,
       "current_weight": 762.0,
       "net_weight": 1000.0,
@@ -1598,7 +1598,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Bone White",
       "initial_weight": 1220.0,
       "current_weight": 1220.0,
       "net_weight": 1000.0,
@@ -1621,7 +1621,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "HS-PLA black",
       "initial_weight": 1220.0,
       "current_weight": 1220.0,
       "net_weight": 1000.0,
@@ -1644,7 +1644,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "BW Grün",
       "initial_weight": 1274.0,
       "current_weight": 910.0,
       "net_weight": 1000.0,
@@ -1667,7 +1667,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Silber Matt",
       "initial_weight": 1239.0,
       "current_weight": 1239.0,
       "net_weight": 1000.0,
@@ -1690,7 +1690,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Hellgrau",
       "initial_weight": 2274.0,
       "current_weight": 2274.0,
       "net_weight": 1000.0,
@@ -1713,7 +1713,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Sonnengelb",
       "initial_weight": 1186.0,
       "current_weight": 1186.0,
       "net_weight": 1000.0,
@@ -1736,7 +1736,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "95A Black",
       "initial_weight": 600.0,
       "current_weight": 600.0,
       "net_weight": 500.0,
@@ -1759,7 +1759,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "White",
       "initial_weight": 350.0,
       "current_weight": 184.0,
       "net_weight": 250.0,
@@ -1782,7 +1782,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Galaxy Black",
       "initial_weight": 1220.0,
       "current_weight": 1119.0,
       "net_weight": 1000.0,
@@ -1805,7 +1805,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Marmor",
       "initial_weight": 1220.0,
       "current_weight": 1220.0,
       "net_weight": 1000.0,
@@ -1828,7 +1828,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Black",
       "initial_weight": 1155.0,
       "current_weight": 1155.0,
       "net_weight": 1000.0,
@@ -1851,7 +1851,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Neon Gelb RAL 1026",
       "initial_weight": 1157.0,
       "current_weight": 1157.0,
       "net_weight": 1000.0,
@@ -1874,7 +1874,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Cherry Red",
       "initial_weight": 5130.0,
       "current_weight": 5130.0,
       "net_weight": 5000.0,
@@ -1897,7 +1897,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Sky Blue",
       "initial_weight": 1243.0,
       "current_weight": 1243.0,
       "net_weight": 1100.0,
@@ -1920,7 +1920,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "White",
       "initial_weight": 1220.0,
       "current_weight": 220.0,
       "net_weight": 1000.0,
@@ -1943,7 +1943,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Grün",
       "initial_weight": 1220.0,
       "current_weight": 1220.0,
       "net_weight": 1000.0,
@@ -1966,7 +1966,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Beige",
       "initial_weight": 1220.0,
       "current_weight": 220.0,
       "net_weight": 1000.0,
@@ -1989,7 +1989,7 @@
           "a": 255
         }
       ],
-      "color_name": null,
+      "color_name": "Green transparent",
       "initial_weight": 1000.0,
       "current_weight": 498.0,
       "net_weight": 500.0,
