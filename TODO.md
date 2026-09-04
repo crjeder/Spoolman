@@ -7,7 +7,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] filament create/edit + spool create: SpoolmanDB lookup — fetch https://donkie.github.io/SpoolmanDB/filaments.json, cache in localStorage (24h TTL + ETag), client-side search, auto-fill filament fields; in spool create auto-create missing filament and notify user
 - [ ] filament/spool: filamentcolors.xyz color lookup — deferred: API CORS headers absent from their Django app, direct WASM fetch will be blocked; needs a server-side proxy endpoint (/api/v1/proxy/filamentcolors) before this is viable
 - [x] test on mobile
-- [ ] multi-color search?
+- [x] multi-color search? — spool color filter matches any of a spool's colors and sorts by closest ΔE (PR #91)
 - [~] add color button next to the existing color field — "+"/"−" multi-color editor in spool create/edit (max 4), server guard; manual/Playwright verification pending. openspec: multi-color-spool-edit
 - [x] reload database button (in settings?) — shipped in 1.7.0 (`POST /api/v1/reload` + Settings button)
 
