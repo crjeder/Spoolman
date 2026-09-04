@@ -365,6 +365,9 @@ impl JsonStore {
         if !store.locations.iter().any(|l| l.id == location_id) {
             return Err(StoreError::Validation("location_id does not exist".into()));
         }
+        if req.colors.len() > 4 {
+            return Err(StoreError::Validation("a spool may have at most 4 colors".into()));
+        }
         let existing: HashSet<u32> = store.spools.iter().map(|s| s.id).collect();
         let id = Self::new_id(&existing);
         let spool = Spool {
@@ -394,6 +397,9 @@ impl JsonStore {
             if !store.locations.iter().any(|l| l.id == lid) {
                 return Err(StoreError::Validation("location_id does not exist".into()));
             }
+        }
+        if req.colors.as_ref().is_some_and(|c| c.len() > 4) {
+            return Err(StoreError::Validation("a spool may have at most 4 colors".into()));
         }
         let spool = store
             .spools
