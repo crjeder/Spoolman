@@ -9,11 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Spool create and edit forms now support multiple colors. A "+" button at the end of a color row adds another color (up to 4); a "−" button removes any row past the first. All colors are saved in order and shown as swatches in the spool list and detail views.
-
-### Changed
-
-- The API rejects spool create/update requests carrying more than 4 colors with a validation error.
+- Settings page has a "Reload database" button that re-reads the data file from disk into the running server, so a restored backup or manually-edited `spoolman.json` takes effect without a restart. Invalid or unreadable files are rejected and the currently-loaded data is kept.
 
 ## [1.6.1] - 2026-09-03
 

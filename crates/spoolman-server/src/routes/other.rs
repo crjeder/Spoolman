@@ -1,6 +1,6 @@
 use axum::{
     extract::{Path, State},
-    routing::{get, put},
+    routing::{get, post, put},
     Json, Router,
 };
 use serde_json::{json, Value};
@@ -15,6 +15,7 @@ pub fn router() -> Router<JsonStore> {
         .route("/export", get(export))
         .route("/setting", get(list_settings))
         .route("/setting/{key}", put(put_setting))
+        .route("/reload", post(reload))
 }
 
 async fn info(State(store): State<JsonStore>) -> Json<Value> {
@@ -52,5 +53,10 @@ async fn put_setting(
     Json(body): Json<PutSetting>,
 ) -> Result<axum::http::StatusCode> {
     store.put_setting(key, body.value)?;
+    Ok(axum::http::StatusCode::NO_CONTENT)
+}
+
+async fn reload(State(store): State<JsonStore>) -> Result<axum::http::StatusCode> {
+    store.reload()?;
     Ok(axum::http::StatusCode::NO_CONTENT)
 }
