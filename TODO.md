@@ -9,7 +9,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [x] test on mobile
 - [ ] multi-color search?
 - [~] add color button next to the existing color field — "+"/"−" multi-color editor in spool create/edit (max 4), server guard; manual/Playwright verification pending. openspec: multi-color-spool-edit
-- [ ] reload database button (in settings?)
+- [x] reload database button (in settings?) — shipped in 1.7.0 (`POST /api/v1/reload` + Settings button)
 
 ## Defects
 - [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, non-root container user can't write; fixed in Dockerfile, not yet verified against a real Docker build. -> use the username spoolman
