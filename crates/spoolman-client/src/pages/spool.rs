@@ -17,6 +17,69 @@ use crate::{
 };
 use spoolman_types::requests::CreateFilament;
 
+// ── Color rows ─────────────────────────────────────────────────────────────────
+
+/// One editable spool color: a `#rrggbb` hex signal plus an opacity signal.
+type ColorRow = (RwSignal<String>, RwSignal<u8>);
+
+const MAX_COLORS: usize = 4;
+
+fn new_color_row() -> ColorRow {
+    (RwSignal::new(String::from("#000000")), RwSignal::new(255u8))
+}
+
+/// Collect all rows into the `colors` array, applying alpha and dropping rows
+/// whose hex fails to parse. Order is preserved top-to-bottom.
+fn rows_to_colors(rows: RwSignal<Vec<ColorRow>>) -> Vec<Rgba> {
+    rows.get()
+        .into_iter()
+        .filter_map(|(hex, alpha)| {
+            hex_to_rgba(&hex.get()).map(|mut c| {
+                c.a = alpha.get();
+                c
+            })
+        })
+        .collect()
+}
+
+/// Render the multi-color editor: one `.color-alpha-row` per color, a "−" button
+/// on every row past the first, and a "+" button on the last row until 4 rows exist.
+fn color_rows_editor(rows: RwSignal<Vec<ColorRow>>) -> impl IntoView {
+    view! {
+        <div class="color-rows">
+            {move || {
+                let list = rows.get();
+                let n = list.len();
+                list.into_iter().enumerate().map(|(i, (hex, alpha))| view! {
+                    <span class="color-alpha-row">
+                        <input type="color"
+                            prop:value=move || hex.get()
+                            on:input=move |ev| hex.set(event_target_value(&ev)) />
+                        <input type="text" class="color-hex-input" maxlength="7" placeholder="#rrggbb"
+                            prop:value=move || hex.get()
+                            on:input=move |ev| {
+                                let v = event_target_value(&ev);
+                                if hex_to_rgba(&v).is_some() { hex.set(v); }
+                            } />
+                        <input type="range" min="0" max="255" title="Opacity"
+                            prop:value=move || alpha.get().to_string()
+                            on:input=move |ev| alpha.set(event_target_value(&ev).parse().unwrap_or(255)) />
+                        <span class="alpha-pct">{move || format!("{}%", (alpha.get() as u16 * 100 / 255))}</span>
+                        {(i > 0).then(|| view! {
+                            <button type="button" class="btn-color-row" title="Remove color"
+                                on:click=move |_| rows.update(|v| { v.remove(i); })>"−"</button>
+                        })}
+                        {(i + 1 == n && n < MAX_COLORS).then(|| view! {
+                            <button type="button" class="btn-color-row" title="Add color"
+                                on:click=move |_| rows.update(|v| v.push(new_color_row()))>"+"</button>
+                        })}
+                    </span>
+                }).collect_view()
+            }}
+        </div>
+    }
+}
+
 // ── List ───────────────────────────────────────────────────────────────────────
 
 #[component]
@@ -642,8 +705,7 @@ pub fn SpoolCreate() -> impl IntoView {
     let locations = LocalResource::new(|| async { api::list_locations().await });
 
     let filament_id = RwSignal::new(0u32);
-    let color_hex = RwSignal::new(String::from("#000000"));
-    let color_alpha = RwSignal::new(255u8);
+    let color_rows = RwSignal::new(vec![new_color_row()]);
     let color_name = RwSignal::new(String::new());
     let initial_weight = RwSignal::new(String::new());
     let net_weight = RwSignal::new(String::new());
@@ -700,7 +762,7 @@ pub fn SpoolCreate() -> impl IntoView {
     let on_db_select = Callback::new(move |entry: crate::spoolmandb::SpoolmanEntry| {
         // Fill color fields.
         if let Some(ref hex) = entry.color_hex {
-            color_hex.set(format!("#{hex}"));
+            color_rows.with_untracked(|v| v[0].0.set(format!("#{hex}")));
         }
         color_name.set(entry.name.clone());
         if let Some(w) = entry.weight {
@@ -771,12 +833,7 @@ pub fn SpoolCreate() -> impl IntoView {
             let weight = initial_weight.get().parse::<f32>().unwrap_or(0.0);
             let body = CreateSpool {
                 filament_id: filament_id.get(),
-                colors: hex_to_rgba(&color_hex.get())
-                    .map(|mut c| {
-                        c.a = color_alpha.get();
-                        vec![c]
-                    })
-                    .unwrap_or_default(),
+                colors: rows_to_colors(color_rows),
                 color_name: Some(color_name.get()).filter(|s| !s.is_empty()),
                 location_id: location_id.get(),
                 initial_weight: weight,
@@ -841,21 +898,7 @@ pub fn SpoolCreate() -> impl IntoView {
                 </label>
                 <label>
                     "Color"
-                    <span class="color-alpha-row">
-                        <input type="color"
-                            prop:value=move || color_hex.get()
-                            on:input=move |ev| color_hex.set(event_target_value(&ev)) />
-                        <input type="text" class="color-hex-input" maxlength="7" placeholder="#rrggbb"
-                            prop:value=move || color_hex.get()
-                            on:input=move |ev| {
-                                let v = event_target_value(&ev);
-                                if hex_to_rgba(&v).is_some() { color_hex.set(v); }
-                            } />
-                        <input type="range" min="0" max="255" title="Opacity"
-                            prop:value=move || color_alpha.get().to_string()
-                            on:input=move |ev| color_alpha.set(event_target_value(&ev).parse().unwrap_or(255)) />
-                        <span class="alpha-pct">{move || format!("{}%", (color_alpha.get() as u16 * 100 / 255))}</span>
-                    </span>
+                    {color_rows_editor(color_rows)}
                 </label>
                 <label>
                     "Color name"
@@ -917,8 +960,7 @@ pub fn SpoolEdit() -> impl IntoView {
     let current_weight = RwSignal::new(String::new());
     let net_weight = RwSignal::new(String::new());
     let price = RwSignal::new(String::new());
-    let color_hex = RwSignal::new(String::from("#000000"));
-    let color_alpha = RwSignal::new(255u8);
+    let color_rows = RwSignal::new(vec![new_color_row()]);
     let color_name = RwSignal::new(String::new());
     let location_id = RwSignal::new(Option::<u32>::None);
     let first_used = RwSignal::new(String::new());
@@ -940,10 +982,18 @@ pub fn SpoolEdit() -> impl IntoView {
                     .unwrap_or_default(),
             );
             price.set(sr.spool.price.map(|v| v.to_string()).unwrap_or_default());
-            if let Some(c) = sr.spool.colors.first() {
-                color_hex.set(format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b));
-                color_alpha.set(c.a);
-            }
+            let rows: Vec<ColorRow> = sr
+                .spool
+                .colors
+                .iter()
+                .map(|c| {
+                    (
+                        RwSignal::new(format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b)),
+                        RwSignal::new(c.a),
+                    )
+                })
+                .collect();
+            color_rows.set(if rows.is_empty() { vec![new_color_row()] } else { rows });
             color_name.set(sr.spool.color_name.clone().unwrap_or_default());
             location_id.set(sr.spool.location_id);
             let today = || Utc::now().format("%Y-%m-%d").to_string();
@@ -995,14 +1045,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 current_weight: current_weight.get().parse::<f32>().ok(),
                 net_weight: net_weight.get().parse::<f32>().ok(),
                 price: price.get().parse::<f32>().ok(),
-                colors: Some(
-                    hex_to_rgba(&color_hex.get())
-                        .map(|mut c| {
-                            c.a = color_alpha.get();
-                            vec![c]
-                        })
-                        .unwrap_or_default(),
-                ),
+                colors: Some(rows_to_colors(color_rows)),
                 color_name: Some(color_name.get()),
                 location_id: location_id.get(),
                 first_used: parse_dt(prune_default(first_used.get(), first_used_was_none.get())),
@@ -1042,21 +1085,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 </label>
                 <label>
                     "Color"
-                    <span class="color-alpha-row">
-                        <input type="color"
-                            prop:value=move || color_hex.get()
-                            on:input=move |ev| color_hex.set(event_target_value(&ev)) />
-                        <input type="text" class="color-hex-input" maxlength="7" placeholder="#rrggbb"
-                            prop:value=move || color_hex.get()
-                            on:input=move |ev| {
-                                let v = event_target_value(&ev);
-                                if hex_to_rgba(&v).is_some() { color_hex.set(v); }
-                            } />
-                        <input type="range" min="0" max="255" title="Opacity"
-                            prop:value=move || color_alpha.get().to_string()
-                            on:input=move |ev| color_alpha.set(event_target_value(&ev).parse().unwrap_or(255)) />
-                        <span class="alpha-pct">{move || format!("{}%", (color_alpha.get() as u16 * 100 / 255))}</span>
-                    </span>
+                    {color_rows_editor(color_rows)}
                 </label>
                 <label>
                     "Color name"

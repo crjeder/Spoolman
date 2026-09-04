@@ -232,8 +232,11 @@ tests/e2e/playwright-report/
 tests/e2e/dist/
 
 .memsearch/
+
+# Spoolman specific files
 spoolman.json
 new_spoolman.json
 old_spoolman.json
+
 # CocoIndex Code (ccc)
 /.cocoindex_code/
