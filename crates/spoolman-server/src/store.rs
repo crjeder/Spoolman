@@ -59,24 +59,40 @@ impl JsonStore {
         // canonicalize only the parent directory (creating it first if needed)
         // and append the filename so the resolved path is still fully anchored.
         let resolved = Self::resolve_data_path(path)?;
-        let mut data: DataStore = if resolved.exists() {
-            // `resolved` is the canonicalized output of resolve_data_path; the
-            // original path is operator-configured (env var), not user input.
-            let contents = std::fs::read_to_string(&resolved)?; // nosemgrep: path-traversal
-            serde_json::from_str(&contents)?
-        } else {
-            DataStore::default()
-        };
         let store = Self {
             inner: Arc::new(RwLock::new(DataStore::default())),
             path: resolved,
             automatic_backup: true,
             debug_mode: false,
         };
-        // Run any pending schema migrations before exposing the store.
-        store.migrate(&mut data)?;
+        let data = store.read_and_migrate()?;
         *store.inner.write().unwrap() = data;
         Ok(store)
+    }
+
+    /// Re-read the data file from disk and replace the in-memory store.
+    ///
+    /// On any read/parse error the in-memory store is left untouched.
+    pub fn reload(&self) -> Result<()> {
+        let data = self.read_and_migrate()?;
+        *self.inner.write().unwrap() = data;
+        Ok(())
+    }
+
+    /// Read `self.path` from disk (or default if it doesn't exist yet) and
+    /// run any pending schema migrations.
+    fn read_and_migrate(&self) -> Result<DataStore> {
+        let mut data: DataStore = if self.path.exists() {
+            // `self.path` is the canonicalized output of resolve_data_path; the
+            // original path is operator-configured (env var), not user input.
+            let contents = std::fs::read_to_string(&self.path)?; // nosemgrep: path-traversal
+            serde_json::from_str(&contents)?
+        } else {
+            DataStore::default()
+        };
+        // Run any pending schema migrations before exposing the store.
+        self.migrate(&mut data)?;
+        Ok(data)
     }
 
     /// Configure runtime flags from the server config.

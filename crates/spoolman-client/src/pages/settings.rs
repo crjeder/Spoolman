@@ -15,6 +15,21 @@ pub fn SettingsPage() -> impl IntoView {
     let saved = RwSignal::new(false);
     let error = RwSignal::new(Option::<String>::None);
 
+    // Reload-database action — separate status signals so it doesn't clobber
+    // the settings-save status above.
+    let reload_saved = RwSignal::new(false);
+    let reload_error = RwSignal::new(Option::<String>::None);
+    let on_reload = move |_| {
+        reload_saved.set(false);
+        reload_error.set(None);
+        spawn_local(async move {
+            match api::reload_database().await {
+                Ok(()) => reload_saved.set(true),
+                Err(e) => reload_error.set(Some(e.to_string())),
+            }
+        });
+    };
+
     // Diameter settings — read from shared context; local copies for the form.
     let ds = diameter_settings();
     let uniform = RwSignal::new(true);
@@ -266,6 +281,12 @@ pub fn SettingsPage() -> impl IntoView {
                 </fieldset>
                 <button type="submit" class="btn btn-primary ">"Save"</button>
             </form>
+            <section class="reload-database-section">
+                <h2>"Database"</h2>
+                {move || reload_error.get().map(|e| view! { <p class="error">{e}</p> })}
+                {move || reload_saved.get().then(|| view! { <p class="success">"Database reloaded."</p> })}
+                <button type="button" class="btn" on:click=on_reload>"Reload database"</button>
+            </section>
         </div>
     }
 }
