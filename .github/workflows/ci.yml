@@ -15,7 +15,7 @@ permissions:
   packages: read
 
 env:
-  GHCR_IMAGE: donkie/spoolman
+  GHCR_IMAGE: crjeder/spoolman-light
 
 jobs:
   #
