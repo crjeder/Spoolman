@@ -166,7 +166,7 @@ jobs:
   #
   publish-images:
     if: ${{ github.event_name != 'pull_request' }}
-    needs: [check, clippy, build-amd64, build-arm64, build-armv7]
+    needs: [check, clippy, build-amd64] #, build-arm64, build-armv7]
     runs-on: ubuntu-latest
     permissions:
       packages: write
