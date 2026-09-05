@@ -1,3 +1,5 @@
+#![allow(dead_code)] // helpers used by some test binaries, not all
+
 use axum::{
     body::Body,
     http::{Method, Request, StatusCode},
