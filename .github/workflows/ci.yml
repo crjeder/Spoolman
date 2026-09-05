@@ -212,11 +212,10 @@ jobs:
             type=semver,pattern={{major}}
 
       - name: Log in to DockerHub
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v4
         with:
-          registry: ${{ vars.REMOTE_REGISTRY_URL }}
-          username: ${{ secrets.REMOTE_REGISTRY_USERNAME }}
-          password: ${{ secrets.REMOTE_REGISTRY_PASSWORD }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Store git commit and build date
         run: |
