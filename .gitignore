@@ -240,3 +240,4 @@ old_spoolman.json
 
 # CocoIndex Code (ccc)
 /.cocoindex_code/
+.claude/worktrees/
